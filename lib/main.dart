@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'card.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -35,7 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(),
+      body: TaskCard(
+        title: "My title",
+        description: "My description",
+      ),
 
       // This trailing comma makes auto-formatting nicer for build methods.
     );
