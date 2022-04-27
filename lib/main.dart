@@ -1,3 +1,4 @@
+import 'package:agile_dev_2022/widgets/taskpage.dart';
 import 'package:flutter/material.dart';
 import 'package:agile_dev_2022/database.dart';
 
@@ -8,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+<<<<<<< HEAD
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -59,6 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       // This trailing comma makes auto-formatting nicer for build methods.
+=======
+      home: const TaskPage(title: 'Flutter Demo Home Page'),
+>>>>>>> 8406573400eac93331151f5cf17c07ce4d99bc4f
     );
   }
 }
