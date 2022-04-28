@@ -16,6 +16,10 @@ class TaskPage extends StatefulWidget {
 class _MyTaskPageState extends State<TaskPage> {
   late List<ToDoItemData> ToDoItemList = [];
   final MyDB = MyDatabase();
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      backgroundColor: Colors.blue,
+      textStyle: TextStyle(color: Colors.white),
+      padding: EdgeInsets.all(8));
   String valueText = "";
   String toDoTitle = "";
   String toDoDescription = "";
@@ -27,7 +31,7 @@ class _MyTaskPageState extends State<TaskPage> {
 
   void getAllToDoItems() async {
     var temp = await MyDB.getAllToDoItems();
-    setState(() { 
+    setState(() {
       ToDoItemList = temp;
     });
   }
@@ -47,7 +51,7 @@ class _MyTaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed:() => createTask(context, controller) ,
+          onPressed: () => createTask(context, controller),
           child: Icon(Icons.add),
         ),
         body: Column(
@@ -82,52 +86,58 @@ class _MyTaskPageState extends State<TaskPage> {
         ));
   }
 
-  void createTask(BuildContext context, TextEditingController controller) async {
+  void createTask(
+      BuildContext context, TextEditingController controller) async {
     await showCreateToDoItem(context, controller);
-    if(toDoTitle == ""){
+    if (toDoTitle == "") {
       return;
     }
-    addToDoItems(ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
+    addToDoItems(
+        ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
     setState(() {
       toDoTitle = "";
     });
     updateScreen();
   }
 
-  Future<void> showCreateToDoItem(BuildContext context, TextEditingController controller) async {
-    return showDialog(context: context, builder: (context)
-    {return AlertDialog(
-      title: Text(
-        "Add New Task"),
-        content: TextField(
-          keyboardType: TextInputType.multiline,
-          onChanged: (value) {
-            setState(() {
-              valueText = value;
-            });
-          },
-          controller: controller,
-          decoration: InputDecoration(hintText: "Title"),
-        ),
-        actions: [
-          FlatButton(
-            color: Color(0xff1282de),
-             child: Text("Add"),
-             textColor: Colors.white,
-             onPressed:(){
-               setState(() {
-                 toDoTitle = valueText;
-                 controller.clear();
-                 Navigator.pop(context);
-               });
-             },
-             )
-        ],
-        );
-    });
+  Future<void> showCreateToDoItem(
+      BuildContext context, TextEditingController controller) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Add New Task"),
+            content: TextField(
+              keyboardType: TextInputType.multiline,
+              onChanged: (value) {
+                setState(() {
+                  valueText = value;
+                });
+              },
+              controller: controller,
+              decoration: InputDecoration(hintText: "Title"),
+            ),
+            actions: [
+              TextButton(
+                style: flatButtonStyle,
+                child: Text(
+                  "Add",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  setState(() {
+                    toDoTitle = valueText;
+                    controller.clear();
+                    Navigator.pop(context);
+                  });
+                },
+              )
+            ],
+          );
+        });
   }
 
-  void addToDoItems(ToDoItemData toDoItemData) async{
+  void addToDoItems(ToDoItemData toDoItemData) async {
     await MyDB.inserToDoItem(toDoItemData.toCompanion(false));
   }
 
@@ -140,10 +150,6 @@ class _MyTaskPageState extends State<TaskPage> {
       setState(() {
         ToDoItemList = temp;
       });
-    } );
+    });
   }
-
-
-
-
 }
