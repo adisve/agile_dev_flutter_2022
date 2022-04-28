@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS
     ToDoItem(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY NOT NULL,
         title VARCHAR(80) NOT NULL,
         description TEXT,
-        priority INTEGER DEFAULT 4 NOT NULL,
-        deadline TEXT NOT NULL,
-        isDone BOOLEAN NOT NULL CHECK (isDone IN (0, 1))
+        priority INTEGER DEFAULT 2,
+        deadline TEXT,
+        isDone BOOLEAN CHECK (isDone IN (0, 1))
 );
 
 insert_dummy_rows: 

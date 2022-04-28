@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:agile_dev_2022/widgets/card.dart';
 import 'package:agile_dev_2022/task.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +16,20 @@ class TaskPage extends StatefulWidget {
 class _MyTaskPageState extends State<TaskPage> {
   late List<ToDoItemData> ToDoItemList = [];
   final MyDB = MyDatabase();
+  String valueText = "";
+  String toDoTitle = "";
+  String toDoDescription = "";
+  final controller = TextEditingController();
 
   Future<ToDoItemData> getToDoItem(int toDoId) async {
     return await MyDB.getToDoItem(toDoId);
   }
 
   void getAllToDoItems() async {
-    ToDoItemList = await MyDB.getAllToDoItems();
+    var temp = await MyDB.getAllToDoItems();
+    setState(() { 
+      ToDoItemList = temp;
+    });
   }
 
   @override
@@ -37,8 +46,8 @@ class _MyTaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: const FloatingActionButton(
-          onPressed: null,
+        floatingActionButton: FloatingActionButton(
+          onPressed:() => createTask(context, controller) ,
           child: Icon(Icons.add),
         ),
         body: Column(
@@ -72,4 +81,69 @@ class _MyTaskPageState extends State<TaskPage> {
           ],
         ));
   }
+
+  void createTask(BuildContext context, TextEditingController controller) async {
+    await showCreateToDoItem(context, controller);
+    if(toDoTitle == ""){
+      return;
+    }
+    addToDoItems(ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
+    setState(() {
+      toDoTitle = "";
+    });
+    updateScreen();
+  }
+
+  Future<void> showCreateToDoItem(BuildContext context, TextEditingController controller) async {
+    return showDialog(context: context, builder: (context)
+    {return AlertDialog(
+      title: Text(
+        "Add New Task"),
+        content: TextField(
+          keyboardType: TextInputType.multiline,
+          onChanged: (value) {
+            setState(() {
+              valueText = value;
+            });
+          },
+          controller: controller,
+          decoration: InputDecoration(hintText: "Title"),
+        ),
+        actions: [
+          FlatButton(
+            color: Color(0xff1282de),
+             child: Text("Add"),
+             textColor: Colors.white,
+             onPressed:(){
+               setState(() {
+                 toDoTitle = valueText;
+                 controller.clear();
+                 Navigator.pop(context);
+               });
+             },
+             )
+        ],
+        );
+    });
+  }
+
+  void addToDoItems(ToDoItemData toDoItemData) async{
+    await MyDB.inserToDoItem(toDoItemData.toCompanion(false));
+  }
+
+  void updateScreen() {
+    List<ToDoItemData> temp = [];
+    MyDB.getAllToDoItems().then((databaselist) {
+      for (var toDoItem in databaselist) {
+        temp.add(toDoItem);
+      }
+      setState(() {
+        ToDoItemList = temp;
+      });
+    } );
+  }
+
+
+
+
 }
