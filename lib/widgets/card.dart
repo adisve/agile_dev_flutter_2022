@@ -1,9 +1,9 @@
-import 'package:agile_dev_2022/database/database.dart';
+import 'package:agile_dev_2022/todo_model.dart';
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatefulWidget {
   final Function notifyParent;
-  final ToDoItemData toDoItem;
+  TodoModel toDoItem;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -16,7 +16,6 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
-  bool checked = false;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,11 +35,13 @@ class _TaskCardState extends State<TaskCard> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: Checkbox(
-                              value: checked,
+                              key: UniqueKey(),
+                              shape: CircleBorder(),
+                              value: widget.toDoItem.isChecked,
                               onChanged: (newValue) {
                                 widget.notifyParent(widget.toDoItem);
                                 setState(() {
-                                  checked = newValue!;
+                                  widget.toDoItem.isChecked = newValue!;
                                 });
                               },
                             ),

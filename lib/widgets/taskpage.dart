@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:agile_dev_2022/todo_model.dart';
 import 'package:agile_dev_2022/widgets/card.dart';
 import 'package:agile_dev_2022/task.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,9 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
-  List<ToDoItemData> CheckedItems = [];
-  late List<ToDoItemData> ToDoItemList = [];
+  List<TodoModel> CheckedItems = [];
+  late List<bool> isChecked;
+  late List<TodoModel> ToDoItemList = [];
   final MyDB = MyDatabase();
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
       backgroundColor: Colors.blue,
@@ -28,7 +30,7 @@ class _MyTaskPageState extends State<TaskPage> {
 
   @override
   void initState() {
-    getAllToDoItems();
+    updateScreen();
     super.initState();
   }
 
@@ -50,7 +52,6 @@ class _MyTaskPageState extends State<TaskPage> {
             ),
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 itemCount: ToDoItemList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -68,36 +69,41 @@ class _MyTaskPageState extends State<TaskPage> {
                 },
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                  padding: EdgeInsets.all(30.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red),
-                    ),
-                    onPressed: () {
-                      removeCheckedList();
-                    },
-                    child: Icon(Icons.delete),
-                  )),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                  padding: EdgeInsets.all(30.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                    onPressed: () {
-                      createTask(context, controller);
-                    },
-                    child: Icon(Icons.add),
-                  )),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                      padding: EdgeInsets.only(left: 30, bottom: 40),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                        ),
+                        onPressed: () {
+                          removeCheckedList();
+                        },
+                        child: Icon(Icons.delete),
+                      )),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                      padding: EdgeInsets.only(right: 30, bottom: 40),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue),
+                        ),
+                        onPressed: () {
+                          createTask(context, controller);
+                        },
+                        child: Icon(Icons.add),
+                      )),
+                ),
+              ],
+            )
           ],
         ));
   }
@@ -156,10 +162,11 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void updateScreen() {
-    List<ToDoItemData> temp = [];
+    List<TodoModel> temp = [];
     MyDB.getAllToDoItems().then((databaselist) {
       for (var toDoItem in databaselist) {
-        temp.add(toDoItem);
+        temp.add(TodoModel(toDoItem.id, toDoItem.title, toDoItem.description,
+            toDoItem.priority, toDoItem.deadline, toDoItem.isDone, false));
       }
       setState(() {
         ToDoItemList = temp;
@@ -171,26 +178,38 @@ class _MyTaskPageState extends State<TaskPage> {
     return await MyDB.getToDoItem(toDoId);
   }
 
-  void getAllToDoItems() async {
-    var temp = await MyDB.getAllToDoItems();
-    setState(() {
-      ToDoItemList = temp;
-    });
-  }
-
-  void updateCheckedList(ToDoItemData ToDoItem) {
-    setState(() {
-      CheckedItems.add(ToDoItem);
-    });
-  }
-
-  void removeCheckedList() {
-    for (var item in CheckedItems) {
-      MyDB.deleteToDoItem(item.toCompanion(true));
+  void updateCheckedList(TodoModel todoModel) {
+    if (CheckedItems.contains(todoModel)) {
+      setState(() {
+        CheckedItems.remove(todoModel);
+      });
+      return;
     }
     setState(() {
-      CheckedItems = [];
-      getAllToDoItems();
+      CheckedItems.add(todoModel);
     });
+  }
+
+  void removeCheckedList() async {
+    var toRemove = [];
+    for (var item in ToDoItemList) {
+      if (item.isChecked) {
+        setState(() {
+          MyDB.deleteToDoItem(ToDoItemData(
+                  id: item.id,
+                  title: item.title,
+                  description: item.description,
+                  deadline: item.deadline,
+                  isDone: item.isDone,
+                  priority: item.priority)
+              .toCompanion(true));
+        });
+        toRemove.add(item);
+      }
+    }
+    setState(() {
+      ToDoItemList.removeWhere((todo) => toRemove.contains(todo));
+    });
+    toRemove.clear();
   }
 }
