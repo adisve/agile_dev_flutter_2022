@@ -7,16 +7,18 @@ import 'package:path/path.dart' as path;
 
 part 'database.g.dart';
 
-class ToDoItem extends Table {
+/*class ToDoItem extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text().withLength(min: 1, max: 80)();
   TextColumn get description => text().nullable()();
   IntColumn get priority => integer().withDefault(const Constant(2))();
   DateTimeColumn get deadline => dateTime()();
   BoolColumn get isDone => boolean()();
-}
+}*/
 
-@DriftDatabase(tables: [ToDoItem])
+@DriftDatabase(
+  include: {'tables.drift'},
+)
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
