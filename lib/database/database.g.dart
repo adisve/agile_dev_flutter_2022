@@ -11,16 +11,16 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
   final int id;
   final String title;
   final String? description;
-  final int priority;
-  final String deadline;
-  final bool isDone;
+  final int? priority;
+  final String? deadline;
+  final bool? isDone;
   ToDoItemData(
       {required this.id,
       required this.title,
       this.description,
-      required this.priority,
-      required this.deadline,
-      required this.isDone});
+      this.priority,
+      this.deadline,
+      this.isDone});
   factory ToDoItemData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ToDoItemData(
@@ -31,11 +31,11 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
       description: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
       priority: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}priority'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}priority']),
       deadline: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}deadline'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}deadline']),
       isDone: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}isDone'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}isDone']),
     );
   }
   @override
@@ -46,9 +46,15 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String?>(description);
     }
-    map['priority'] = Variable<int>(priority);
-    map['deadline'] = Variable<String>(deadline);
-    map['isDone'] = Variable<bool>(isDone);
+    if (!nullToAbsent || priority != null) {
+      map['priority'] = Variable<int?>(priority);
+    }
+    if (!nullToAbsent || deadline != null) {
+      map['deadline'] = Variable<String?>(deadline);
+    }
+    if (!nullToAbsent || isDone != null) {
+      map['isDone'] = Variable<bool?>(isDone);
+    }
     return map;
   }
 
@@ -59,9 +65,14 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      priority: Value(priority),
-      deadline: Value(deadline),
-      isDone: Value(isDone),
+      priority: priority == null && nullToAbsent
+          ? const Value.absent()
+          : Value(priority),
+      deadline: deadline == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deadline),
+      isDone:
+          isDone == null && nullToAbsent ? const Value.absent() : Value(isDone),
     );
   }
 
@@ -72,9 +83,9 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String?>(json['description']),
-      priority: serializer.fromJson<int>(json['priority']),
-      deadline: serializer.fromJson<String>(json['deadline']),
-      isDone: serializer.fromJson<bool>(json['isDone']),
+      priority: serializer.fromJson<int?>(json['priority']),
+      deadline: serializer.fromJson<String?>(json['deadline']),
+      isDone: serializer.fromJson<bool?>(json['isDone']),
     );
   }
   @override
@@ -84,9 +95,9 @@ class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String?>(description),
-      'priority': serializer.toJson<int>(priority),
-      'deadline': serializer.toJson<String>(deadline),
-      'isDone': serializer.toJson<bool>(isDone),
+      'priority': serializer.toJson<int?>(priority),
+      'deadline': serializer.toJson<String?>(deadline),
+      'isDone': serializer.toJson<bool?>(isDone),
     };
   }
 
@@ -137,9 +148,9 @@ class ToDoItemCompanion extends UpdateCompanion<ToDoItemData> {
   final Value<int> id;
   final Value<String> title;
   final Value<String?> description;
-  final Value<int> priority;
-  final Value<String> deadline;
-  final Value<bool> isDone;
+  final Value<int?> priority;
+  final Value<String?> deadline;
+  final Value<bool?> isDone;
   const ToDoItemCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -153,18 +164,16 @@ class ToDoItemCompanion extends UpdateCompanion<ToDoItemData> {
     required String title,
     this.description = const Value.absent(),
     this.priority = const Value.absent(),
-    required String deadline,
-    required bool isDone,
-  })  : title = Value(title),
-        deadline = Value(deadline),
-        isDone = Value(isDone);
+    this.deadline = const Value.absent(),
+    this.isDone = const Value.absent(),
+  }) : title = Value(title);
   static Insertable<ToDoItemData> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<String?>? description,
-    Expression<int>? priority,
-    Expression<String>? deadline,
-    Expression<bool>? isDone,
+    Expression<int?>? priority,
+    Expression<String?>? deadline,
+    Expression<bool?>? isDone,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -180,9 +189,9 @@ class ToDoItemCompanion extends UpdateCompanion<ToDoItemData> {
       {Value<int>? id,
       Value<String>? title,
       Value<String?>? description,
-      Value<int>? priority,
-      Value<String>? deadline,
-      Value<bool>? isDone}) {
+      Value<int?>? priority,
+      Value<String?>? deadline,
+      Value<bool?>? isDone}) {
     return ToDoItemCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -206,13 +215,13 @@ class ToDoItemCompanion extends UpdateCompanion<ToDoItemData> {
       map['description'] = Variable<String?>(description.value);
     }
     if (priority.present) {
-      map['priority'] = Variable<int>(priority.value);
+      map['priority'] = Variable<int?>(priority.value);
     }
     if (deadline.present) {
-      map['deadline'] = Variable<String>(deadline.value);
+      map['deadline'] = Variable<String?>(deadline.value);
     }
     if (isDone.present) {
-      map['isDone'] = Variable<bool>(isDone.value);
+      map['isDone'] = Variable<bool?>(isDone.value);
     }
     return map;
   }
@@ -241,7 +250,7 @@ class ToDoItem extends Table with TableInfo<ToDoItem, ToDoItemData> {
       'id', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      $customConstraints: 'PRIMARY KEY AUTOINCREMENT');
+      $customConstraints: 'PRIMARY KEY NOT NULL');
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
       'title', aliasedName, false,
@@ -257,23 +266,23 @@ class ToDoItem extends Table with TableInfo<ToDoItem, ToDoItemData> {
       $customConstraints: '');
   final VerificationMeta _priorityMeta = const VerificationMeta('priority');
   late final GeneratedColumn<int?> priority = GeneratedColumn<int?>(
-      'priority', aliasedName, false,
+      'priority', aliasedName, true,
       type: const IntType(),
       requiredDuringInsert: false,
-      $customConstraints: 'DEFAULT 4 NOT NULL',
-      defaultValue: const CustomExpression<int>('4'));
+      $customConstraints: 'DEFAULT 2',
+      defaultValue: const CustomExpression<int>('2'));
   final VerificationMeta _deadlineMeta = const VerificationMeta('deadline');
   late final GeneratedColumn<String?> deadline = GeneratedColumn<String?>(
-      'deadline', aliasedName, false,
+      'deadline', aliasedName, true,
       type: const StringType(),
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+      requiredDuringInsert: false,
+      $customConstraints: '');
   final VerificationMeta _isDoneMeta = const VerificationMeta('isDone');
   late final GeneratedColumn<bool?> isDone = GeneratedColumn<bool?>(
-      'isDone', aliasedName, false,
+      'isDone', aliasedName, true,
       type: const BoolType(),
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (isDone IN (0, 1))');
+      requiredDuringInsert: false,
+      $customConstraints: 'CHECK (isDone IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns =>
       [id, title, description, priority, deadline, isDone];
@@ -308,14 +317,10 @@ class ToDoItem extends Table with TableInfo<ToDoItem, ToDoItemData> {
     if (data.containsKey('deadline')) {
       context.handle(_deadlineMeta,
           deadline.isAcceptableOrUnknown(data['deadline']!, _deadlineMeta));
-    } else if (isInserting) {
-      context.missing(_deadlineMeta);
     }
     if (data.containsKey('isDone')) {
       context.handle(_isDoneMeta,
           isDone.isAcceptableOrUnknown(data['isDone']!, _isDoneMeta));
-    } else if (isInserting) {
-      context.missing(_isDoneMeta);
     }
     return context;
   }
@@ -342,7 +347,7 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   late final ToDoItem toDoItem = ToDoItem(this);
   Future<int> insert_dummy_rows() {
     return customInsert(
-      'INSERT INTO ToDoItem (title, description, priority, deadline, isDone)\n    VALUES \n    (\'Return book\', \'Library working hours - 8-20\', 3, DATE(\'now\'), 0),\n    (\'Read 50 p from students book\', \'The book is on Canvas\', 1, \'2016-08-01\', 0)',
+      'INSERT INTO ToDoItem (title, description, priority, deadline, isDone)\r\n    VALUES \r\n    (\'Return book\', \'Library working hours - 8-20\', 3, DATE(\'now\'), 0),\r\n    (\'Read 50 p from students book\', \'The book is on Canvas\', 1, \'2016-08-01\', 0)',
       variables: [],
       updates: {toDoItem},
     );
@@ -350,22 +355,22 @@ abstract class _$MyDatabase extends GeneratedDatabase {
 
   Future<int> insert_more_dummies() {
     return customInsert(
-      'INSERT INTO ToDoItem (title, description, deadline, isDone)\n    VALUES \n    (\'Do laundry\', NULL, DATE(\'now\'), 0)',
+      'INSERT INTO ToDoItem (title, description, deadline, isDone)\r\n    VALUES \r\n    (\'Do laundry\', NULL, DATE(\'now\'), 0)',
       variables: [],
       updates: {toDoItem},
     );
   }
 
-  Future<int> add_task(String title, String? description, int priority,
-      String deadline, bool isDone) {
+  Future<int> add_task(String title, String? description, int? priority,
+      String? deadline, bool? isDone) {
     return customInsert(
-      'INSERT INTO ToDoItem (title, description, priority, deadline, isDone)\n    VALUES \n    (:title, :description, :priority, :deadline, :isDone)',
+      'INSERT INTO ToDoItem (title, description, priority, deadline, isDone)\r\n    VALUES \r\n    (:title, :description, :priority, :deadline, :isDone)',
       variables: [
         Variable<String>(title),
         Variable<String?>(description),
-        Variable<int>(priority),
-        Variable<String>(deadline),
-        Variable<bool>(isDone)
+        Variable<int?>(priority),
+        Variable<String?>(deadline),
+        Variable<bool?>(isDone)
       ],
       updates: {toDoItem},
     );
@@ -380,16 +385,16 @@ abstract class _$MyDatabase extends GeneratedDatabase {
     );
   }
 
-  Future<int> update_task(String title, String? description, int priority,
-      String deadline, bool isDone, int id) {
+  Future<int> update_task(String title, String? description, int? priority,
+      String? deadline, bool? isDone, int id) {
     return customUpdate(
-      'UPDATE ToDoItem\n    SET title = :title, description = :description, priority = :priority, deadline = :deadline, isDone = :isDone\n    WHERE id = :id',
+      'UPDATE ToDoItem\r\n    SET title = :title, description = :description, priority = :priority, deadline = :deadline, isDone = :isDone\r\n    WHERE id = :id',
       variables: [
         Variable<String>(title),
         Variable<String?>(description),
-        Variable<int>(priority),
-        Variable<String>(deadline),
-        Variable<bool>(isDone),
+        Variable<int?>(priority),
+        Variable<String?>(deadline),
+        Variable<bool?>(isDone),
         Variable<int>(id)
       ],
       updates: {toDoItem},

@@ -22,9 +22,9 @@ class _TaskCardState extends State<TaskCard> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Card(
-              elevation: 2,
+              elevation: 0,
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -45,6 +45,9 @@ class _TaskCardState extends State<TaskCard> {
                             ),
                             child: Text(
                               widget.title,
+                              maxLines: 1, // Don't wrap at all
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 20),
                             ),
