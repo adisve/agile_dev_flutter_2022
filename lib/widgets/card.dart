@@ -1,13 +1,14 @@
+import 'package:agile_dev_2022/database/database.dart';
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatefulWidget {
-  final String title;
-  final String? description;
+  final Function notifyParent;
+  final ToDoItemData toDoItem;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
 
-  const TaskCard({Key? key, required this.title, this.description})
+  const TaskCard({Key? key, required this.notifyParent, required this.toDoItem})
       : super(key: key);
 }
 
@@ -34,9 +35,12 @@ class _TaskCardState extends State<TaskCard> {
                             padding: const EdgeInsets.all(10),
                             child: Checkbox(
                               value: checked,
-                              onChanged: (newValue) => setState(() {
-                                checked = newValue!;
-                              }),
+                              onChanged: (newValue) {
+                                widget.notifyParent(widget.toDoItem);
+                                setState(() {
+                                  checked = newValue!;
+                                });
+                              },
                             ),
                           ),
                           Padding(
@@ -44,7 +48,7 @@ class _TaskCardState extends State<TaskCard> {
                               top: 12,
                             ),
                             child: Text(
-                              widget.title,
+                              widget.toDoItem.title,
                               maxLines: 1, // Don't wrap at all
                               softWrap: false,
                               overflow: TextOverflow.fade,
@@ -56,12 +60,12 @@ class _TaskCardState extends State<TaskCard> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (widget.description != null)
+                          if (widget.toDoItem.description != null)
                             () {
                               return Padding(
                                 padding: const EdgeInsets.only(left: 52),
                                 child: Text(
-                                  widget.description!,
+                                  widget.toDoItem.description!,
                                   style: const TextStyle(
                                       color: Color(0xFF434343), fontSize: 17),
                                 ),

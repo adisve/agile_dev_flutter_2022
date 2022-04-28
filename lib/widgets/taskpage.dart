@@ -14,6 +14,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
+  List<ToDoItemData> CheckedItems = [];
   late List<ToDoItemData> ToDoItemList = [];
   final MyDB = MyDatabase();
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
@@ -36,6 +37,22 @@ class _MyTaskPageState extends State<TaskPage> {
     });
   }
 
+  void updateCheckedList(ToDoItemData ToDoItem) {
+    setState(() {
+      CheckedItems.add(ToDoItem);
+    });
+  }
+
+  void removeCheckedList() {
+    for (var item in CheckedItems) {
+      MyDB.deleteToDoItem(item.toCompanion(true));
+    }
+    setState(() {
+      CheckedItems = [];
+      getAllToDoItems();
+    });
+  }
+
   @override
   void initState() {
     getAllToDoItems();
@@ -46,10 +63,6 @@ class _MyTaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => createTask(context, controller),
-          child: Icon(Icons.add),
-        ),
         body: Column(
           children: <Widget>[
             Container(
@@ -70,8 +83,8 @@ class _MyTaskPageState extends State<TaskPage> {
                 itemBuilder: (BuildContext context, int index) {
                   return Column(children: [
                     TaskCard(
-                      title: ToDoItemList[index].title,
-                      description: ToDoItemList[index].description,
+                      notifyParent: updateCheckedList,
+                      toDoItem: ToDoItemList[index],
                     ),
                     Divider(
                       indent: 35,
@@ -81,6 +94,36 @@ class _MyTaskPageState extends State<TaskPage> {
                   ]);
                 },
               ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                  padding: EdgeInsets.all(30.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
+                    ),
+                    onPressed: () {
+                      removeCheckedList();
+                    },
+                    child: Icon(Icons.delete),
+                  )),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                  padding: EdgeInsets.all(30.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: () {
+                      createTask(context, controller);
+                    },
+                    child: Icon(Icons.add),
+                  )),
             ),
           ],
         ));
@@ -118,19 +161,6 @@ class _MyTaskPageState extends State<TaskPage> {
               decoration: InputDecoration(hintText: "Title"),
             ),
             actions: [
-<<<<<<< HEAD
-              FlatButton(
-                color: Color(0xff1282de),
-                child: Text("Add"),
-                textColor: Colors.white,
-                onPressed: () {
-                  setState(() {
-                    toDoTitle = valueText;
-                    controller.clear();
-                    Navigator.pop(context);
-                  });
-                },
-=======
               TextButton(
                 style: flatButtonStyle,
                 child: Text(
@@ -142,7 +172,6 @@ class _MyTaskPageState extends State<TaskPage> {
                   controller.clear();
                   Navigator.pop(context);
                 }),
->>>>>>> ccefcedbaed2d80a53688c17fcf518011d900079
               )
             ],
           );
@@ -150,11 +179,7 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void addToDoItems(ToDoItemData toDoItemData) async {
-<<<<<<< HEAD
-    await MyDB.inserToDoItem(toDoItemData.toCompanion(false));
-=======
     await MyDB.inserToDoItem(toDoItemData.toCompanion(true));
->>>>>>> ccefcedbaed2d80a53688c17fcf518011d900079
   }
 
   void updateScreen() {
