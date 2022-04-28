@@ -26,33 +26,6 @@ class _MyTaskPageState extends State<TaskPage> {
   String toDoDescription = "";
   final controller = TextEditingController();
 
-  Future<ToDoItemData> getToDoItem(int toDoId) async {
-    return await MyDB.getToDoItem(toDoId);
-  }
-
-  void getAllToDoItems() async {
-    var temp = await MyDB.getAllToDoItems();
-    setState(() {
-      ToDoItemList = temp;
-    });
-  }
-
-  void updateCheckedList(ToDoItemData ToDoItem) {
-    setState(() {
-      CheckedItems.add(ToDoItem);
-    });
-  }
-
-  void removeCheckedList() {
-    for (var item in CheckedItems) {
-      MyDB.deleteToDoItem(item.toCompanion(true));
-    }
-    setState(() {
-      CheckedItems = [];
-      getAllToDoItems();
-    });
-  }
-
   @override
   void initState() {
     getAllToDoItems();
@@ -191,6 +164,33 @@ class _MyTaskPageState extends State<TaskPage> {
       setState(() {
         ToDoItemList = temp;
       });
+    });
+  }
+
+  Future<ToDoItemData> getToDoItem(int toDoId) async {
+    return await MyDB.getToDoItem(toDoId);
+  }
+
+  void getAllToDoItems() async {
+    var temp = await MyDB.getAllToDoItems();
+    setState(() {
+      ToDoItemList = temp;
+    });
+  }
+
+  void updateCheckedList(ToDoItemData ToDoItem) {
+    setState(() {
+      CheckedItems.add(ToDoItem);
+    });
+  }
+
+  void removeCheckedList() {
+    for (var item in CheckedItems) {
+      MyDB.deleteToDoItem(item.toCompanion(true));
+    }
+    setState(() {
+      CheckedItems = [];
+      getAllToDoItems();
     });
   }
 }

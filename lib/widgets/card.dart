@@ -8,13 +8,15 @@ class TaskCard extends StatefulWidget {
   @override
   State<TaskCard> createState() => _TaskCardState();
 
-  const TaskCard({Key? key, required this.notifyParent, required this.toDoItem})
-      : super(key: key);
+  TaskCard({
+    Key? key,
+    required this.notifyParent,
+    required this.toDoItem,
+  }) : super(key: key);
 }
 
 class _TaskCardState extends State<TaskCard> {
   bool checked = false;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
