@@ -25,7 +25,7 @@ add_task:
     (:title, :description, :priority, :deadline, :isDone);
 
 delete_task:
-    DELETE FROM ToDoItem WHERE id = :id);
+    DELETE FROM ToDoItem WHERE id = :id;
 
 update_task:
     UPDATE ToDoItem
