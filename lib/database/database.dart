@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
 
 part 'database.g.dart';
@@ -48,16 +47,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase(file);
   });
 }
-
-/*
-""" CREATE TABLE IF NOT EXISTS
-    ToDo_item(
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Title VARCHAR(80) NOT NULL,
-        Description TEXT,
-        Priority INTEGER DEFAULT 2 NOT NULL,
-        Deadline TEXT NOT NULL,
-        isDone BOOLEAN NOT NULL CHECK (isDone IN (0, 1))
-    )
-    """
-*/
