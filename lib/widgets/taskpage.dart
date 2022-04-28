@@ -16,6 +16,10 @@ class TaskPage extends StatefulWidget {
 class _MyTaskPageState extends State<TaskPage> {
   late List<ToDoItemData> ToDoItemList = [];
   final MyDB = MyDatabase();
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      backgroundColor: Colors.blue,
+      textStyle: TextStyle(color: Colors.white),
+      padding: EdgeInsets.all(8));
   String valueText = "";
   String toDoTitle = "";
   String toDoDescription = "";
@@ -38,31 +42,24 @@ class _MyTaskPageState extends State<TaskPage> {
     super.initState();
   }
 
-  final List<Task> tasks = [
-    Task("Studying", "Mathematics chapter one"),
-    Task("Studying", "Mathematics chapter one"),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () => createTask(context, controller),
           child: Icon(Icons.add),
         ),
         body: Column(
           children: <Widget>[
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(children: const [
-                  Text(
-                    "Today",
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
-                  ),
-                ]),
+            Container(
+              padding: EdgeInsets.only(top: 20, left: 35, bottom: 10),
+              alignment: Alignment.topLeft,
+              child: const Text(
+                "Today",
+                maxLines: 2,
+                style: TextStyle(
+                    fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
               ),
             ),
             Expanded(
@@ -71,10 +68,17 @@ class _MyTaskPageState extends State<TaskPage> {
                 scrollDirection: Axis.vertical,
                 itemCount: ToDoItemList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskCard(
-                    title: ToDoItemList[index].title,
-                    description: ToDoItemList[index].description,
-                  );
+                  return Column(children: [
+                    TaskCard(
+                      title: ToDoItemList[index].title,
+                      description: ToDoItemList[index].description,
+                    ),
+                    Divider(
+                      indent: 35,
+                      endIndent: 35,
+                      height: 15,
+                    )
+                  ]);
                 },
               ),
             ),
@@ -114,6 +118,7 @@ class _MyTaskPageState extends State<TaskPage> {
               decoration: InputDecoration(hintText: "Title"),
             ),
             actions: [
+<<<<<<< HEAD
               FlatButton(
                 color: Color(0xff1282de),
                 child: Text("Add"),
@@ -125,6 +130,19 @@ class _MyTaskPageState extends State<TaskPage> {
                     Navigator.pop(context);
                   });
                 },
+=======
+              TextButton(
+                style: flatButtonStyle,
+                child: Text(
+                  "Add",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () => setState(() {
+                  toDoTitle = valueText;
+                  controller.clear();
+                  Navigator.pop(context);
+                }),
+>>>>>>> ccefcedbaed2d80a53688c17fcf518011d900079
               )
             ],
           );
@@ -132,7 +150,11 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void addToDoItems(ToDoItemData toDoItemData) async {
+<<<<<<< HEAD
     await MyDB.inserToDoItem(toDoItemData.toCompanion(false));
+=======
+    await MyDB.inserToDoItem(toDoItemData.toCompanion(true));
+>>>>>>> ccefcedbaed2d80a53688c17fcf518011d900079
   }
 
   void updateScreen() {

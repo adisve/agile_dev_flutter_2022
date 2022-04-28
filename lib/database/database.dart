@@ -28,10 +28,19 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // Update task
+  Future<bool> updateToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await (update(toDoItem).replace(ToDoItem));
+  }
 
   // Delete task
+  Future<int> deleteToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await delete(toDoItem).delete(ToDoItem);
+  }
 
   // Mark task as done
+  Future<bool> markDoneToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await (update(toDoItem).replace(ToDoItem));
+  }
 
   // Get all tasks
 
@@ -43,7 +52,7 @@ class MyDatabase extends _$MyDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFold = await getApplicationDocumentsDirectory();
-    final file = File(path.join(dbFold.path, 'db.sqlite'));
+    final file = File(path.join(dbFold.path, 'db.sqlite1'));
     return NativeDatabase(file);
   });
 }
