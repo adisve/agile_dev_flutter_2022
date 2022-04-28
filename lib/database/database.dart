@@ -52,7 +52,7 @@ class MyDatabase extends _$MyDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFold = await getApplicationDocumentsDirectory();
-    final file = File(path.join(dbFold.path, 'db.sqlite'));
+    final file = File(path.join(dbFold.path, 'db.sqlite1'));
     return NativeDatabase(file);
   });
 }

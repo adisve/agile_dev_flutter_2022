@@ -42,31 +42,24 @@ class _MyTaskPageState extends State<TaskPage> {
     super.initState();
   }
 
-  final List<Task> tasks = [
-    Task("Studying", "Mathematics chapter one"),
-    Task("Studying", "Mathematics chapter one"),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () => createTask(context, controller),
           child: Icon(Icons.add),
         ),
         body: Column(
           children: <Widget>[
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(children: const [
-                  Text(
-                    "Today",
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
-                  ),
-                ]),
+            Container(
+              padding: EdgeInsets.only(top: 20, left: 35, bottom: 10),
+              alignment: Alignment.topLeft,
+              child: const Text(
+                "Today",
+                maxLines: 2,
+                style: TextStyle(
+                    fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
               ),
             ),
             Expanded(
@@ -75,10 +68,17 @@ class _MyTaskPageState extends State<TaskPage> {
                 scrollDirection: Axis.vertical,
                 itemCount: ToDoItemList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskCard(
-                    title: ToDoItemList[index].title,
-                    description: ToDoItemList[index].description,
-                  );
+                  return Column(children: [
+                    TaskCard(
+                      title: ToDoItemList[index].title,
+                      description: ToDoItemList[index].description,
+                    ),
+                    Divider(
+                      indent: 35,
+                      endIndent: 35,
+                      height: 15,
+                    )
+                  ]);
                 },
               ),
             ),
@@ -124,13 +124,11 @@ class _MyTaskPageState extends State<TaskPage> {
                   "Add",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  setState(() {
-                    toDoTitle = valueText;
-                    controller.clear();
-                    Navigator.pop(context);
-                  });
-                },
+                onPressed: () => setState(() {
+                  toDoTitle = valueText;
+                  controller.clear();
+                  Navigator.pop(context);
+                }),
               )
             ],
           );
@@ -138,7 +136,7 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void addToDoItems(ToDoItemData toDoItemData) async {
-    await MyDB.inserToDoItem(toDoItemData.toCompanion(false));
+    await MyDB.inserToDoItem(toDoItemData.toCompanion(true));
   }
 
   void updateScreen() {
