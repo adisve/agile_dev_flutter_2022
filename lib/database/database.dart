@@ -7,15 +7,6 @@ import 'package:path/path.dart' as path;
 
 part 'database.g.dart';
 
-/*class ToDoItem extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get title => text().withLength(min: 1, max: 80)();
-  TextColumn get description => text().nullable()();
-  IntColumn get priority => integer().withDefault(const Constant(2))();
-  DateTimeColumn get deadline => dateTime()();
-  BoolColumn get isDone => boolean()();
-}*/
-
 @DriftDatabase(
   include: {'tables.drift'},
 )
@@ -24,6 +15,30 @@ class MyDatabase extends _$MyDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  // Create a task
+  Future<int> inserToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await into(toDoItem).insert(ToDoItem);
+  }
+
+  // Get a specific task
+  Future<ToDoItemData> getToDoItem(int toDoId) async {
+    return await (select(toDoItem)
+          ..where((toDoItemTbl) => toDoItemTbl.id.equals(toDoId)))
+        .getSingle();
+  }
+
+  // Update task
+
+  // Delete task
+
+  // Mark task as done
+
+  // Get all tasks
+
+  Future<List<ToDoItemData>> getAllToDoItems() async {
+    return await select(toDoItem).get();
+  }
 }
 
 LazyDatabase _openConnection() {

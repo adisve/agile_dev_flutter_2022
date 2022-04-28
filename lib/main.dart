@@ -1,6 +1,5 @@
 import 'package:agile_dev_2022/widgets/taskpage.dart';
 import 'package:flutter/material.dart';
-import 'package:agile_dev_2022/database.dart';
 
 void main() {
   runApp(const MyApp());

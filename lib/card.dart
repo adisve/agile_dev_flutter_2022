@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class TaskCard extends StatefulWidget {
   final String title;
-  final String description;
+  final String? description;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
 
-  const TaskCard({Key? key, required this.title, required this.description})
+  const TaskCard({Key? key, required this.title, this.description})
       : super(key: key);
 }
 
@@ -53,14 +53,17 @@ class _TaskCardState extends State<TaskCard> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 52),
-                            child: Text(
-                              widget.description,
-                              style: const TextStyle(
-                                  color: Color(0xFF434343), fontSize: 17),
-                            ),
-                          ),
+                          if (widget.description != null)
+                            () {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 52),
+                                child: Text(
+                                  widget.description!,
+                                  style: const TextStyle(
+                                      color: Color(0xFF434343), fontSize: 17),
+                                ),
+                              );
+                            }(),
                         ]),
                   ])),
         ));
