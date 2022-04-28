@@ -29,10 +29,19 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // Update task
+  Future<bool> updateToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await (update(toDoItem).replace(ToDoItem));
+  }
 
   // Delete task
+  Future<int> deleteToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await delete(toDoItem).delete(ToDoItem);
+  }
 
   // Mark task as done
+  Future<bool> markDoneToDoItem(ToDoItemCompanion ToDoItem) async {
+    return await (update(toDoItem).replace(ToDoItem));
+  }
 
   // Get all tasks
 
@@ -48,16 +57,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase(file);
   });
 }
-
-/*
-""" CREATE TABLE IF NOT EXISTS
-    ToDo_item(
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Title VARCHAR(80) NOT NULL,
-        Description TEXT,
-        Priority INTEGER DEFAULT 2 NOT NULL,
-        Deadline TEXT NOT NULL,
-        isDone BOOLEAN NOT NULL CHECK (isDone IN (0, 1))
-    )
-    """
-*/
