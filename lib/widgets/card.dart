@@ -16,6 +16,11 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      backgroundColor: Colors.green,
+      textStyle: TextStyle(color: Colors.white),
+      padding: EdgeInsets.all(8));
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -75,6 +80,21 @@ class _TaskCardState extends State<TaskCard> {
                               );
                             }(),
                         ]),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          padding: EdgeInsets.only(right: 30, bottom: 40),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                            ),
+                            onPressed: () {
+                              ;
+                            },
+                            child: Icon(Icons.edit),
+                          )),
+                    ),
                   ])),
         ));
   }
