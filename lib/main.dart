@@ -1,5 +1,5 @@
-import 'package:agile_dev_2022/database/database.dart';
-import 'package:agile_dev_2022/widgets/taskpage.dart';
+import 'package:agile_dev_2022/controller/database/database.dart';
+import 'package:agile_dev_2022/view/task_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

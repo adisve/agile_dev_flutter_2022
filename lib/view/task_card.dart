@@ -1,18 +1,20 @@
-import 'package:agile_dev_2022/todo_model.dart';
+import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatefulWidget {
   final Function notifyParent;
-  TodoModel toDoItem;
+  final Function editTaskParent;
+  final TodoModel toDoItem;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
 
-  TaskCard({
-    Key? key,
-    required this.notifyParent,
-    required this.toDoItem,
-  }) : super(key: key);
+  TaskCard(
+      {Key? key,
+      required this.notifyParent,
+      required this.toDoItem,
+      required this.editTaskParent})
+      : super(key: key);
 }
 
 class _TaskCardState extends State<TaskCard> {
@@ -89,9 +91,8 @@ class _TaskCardState extends State<TaskCard> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.green),
                             ),
-                            onPressed: () {
-                              ;
-                            },
+                            onPressed: () =>
+                                widget.editTaskParent(widget.toDoItem),
                             child: Icon(Icons.edit),
                           )),
                     ),

@@ -1,10 +1,11 @@
+import 'dart:developer' as dev;
 import 'dart:math';
-import 'package:agile_dev_2022/api/task_api.dart';
+import 'package:agile_dev_2022/controller/task_api.dart';
 import 'package:agile_dev_2022/main.dart';
-import 'package:agile_dev_2022/todo_model.dart';
-import 'package:agile_dev_2022/widgets/card.dart';
+import 'package:agile_dev_2022/model/todo_model.dart';
+import 'package:agile_dev_2022/view/task_card.dart';
 import 'package:flutter/material.dart';
-import 'package:agile_dev_2022/database/database.dart';
+import 'package:agile_dev_2022/controller/database/database.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key, required this.title}) : super(key: key);
@@ -58,6 +59,7 @@ class _MyTaskPageState extends State<TaskPage> {
                     TaskCard(
                       notifyParent: updateCheckedList,
                       toDoItem: todoItemList[index],
+                      editTaskParent: editTaskParent,
                     ),
                     Divider(
                       indent: 35,
@@ -107,20 +109,6 @@ class _MyTaskPageState extends State<TaskPage> {
         ));
   }
 
-  void createTask(
-      BuildContext context, TextEditingController controller) async {
-    await showCreateToDoItem(context, controller);
-    if (toDoTitle == "") {
-      return;
-    }
-    addToDoItems(
-        ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
-    setState(() {
-      toDoTitle = "";
-    });
-    updateScreen();
-  }
-
   Future<void> showCreateToDoItem(
       BuildContext context, TextEditingController controller) async {
     return showDialog(
@@ -156,8 +144,40 @@ class _MyTaskPageState extends State<TaskPage> {
         });
   }
 
-  void addToDoItems(ToDoItemData toDoItemData) async {
-    await locator<MyDatabase>().inserToDoItem(toDoItemData.toCompanion(true));
+  Future<void> showEditDescription(BuildContext context,
+      TextEditingController controller, TodoModel todoModel) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Add description for ${todoModel.title}"),
+            content: TextField(
+              keyboardType: TextInputType.multiline,
+              onChanged: (value) {
+                setState(() {
+                  toDoDescription = value;
+                });
+              },
+              controller: controller,
+              decoration: InputDecoration(hintText: "Description"),
+            ),
+            actions: [
+              TextButton(
+                style: flatButtonStyle,
+                child: Text(
+                  "Add",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () => setState(() {
+                  toDoDescription = valueText;
+                  controller.clear();
+                  dev.log(toDoDescription);
+                  Navigator.pop(context);
+                }),
+              )
+            ],
+          );
+        });
   }
 
   void updateScreen() {
@@ -183,5 +203,43 @@ class _MyTaskPageState extends State<TaskPage> {
     setState(() {
       todoItemList.removeWhere((todo) => toRemove.contains(todo));
     });
+  }
+
+  void createTask(
+      BuildContext context, TextEditingController controller) async {
+    await showCreateToDoItem(context, controller);
+    if (toDoTitle == "") {
+      return;
+    }
+    addToDoItems(
+        ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
+    setState(() {
+      toDoTitle = "";
+    });
+    updateScreen();
+  }
+
+  void editTaskParent(TodoModel todoModel) async {
+    await showEditDescription(context, controller, todoModel);
+    dev.log(toDoDescription);
+    if (toDoDescription == "") return;
+    getTodoItemsFromDb().then((dbTodoItems) {
+      ToDoItemData itemToEdit = (dbTodoItems
+            ..singleWhere((todoItem) => todoItem.id == todoModel.id))
+          as ToDoItemData;
+      dev.log(itemToEdit.toString());
+      locator<MyDatabase>().updateToDoItem(ToDoItemData(
+              id: itemToEdit.id,
+              title: itemToEdit.title,
+              description: toDoDescription,
+              priority: itemToEdit.priority,
+              deadline: itemToEdit.deadline,
+              isDone: itemToEdit.isDone)
+          .toCompanion(true));
+    });
+    setState(() {
+      toDoDescription = "";
+    });
+    updateScreen();
   }
 }

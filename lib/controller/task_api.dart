@@ -1,6 +1,6 @@
-import 'package:agile_dev_2022/database/database.dart';
+import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/main.dart';
-import 'package:agile_dev_2022/todo_model.dart';
+import 'package:agile_dev_2022/model/todo_model.dart';
 
 List<TodoModel> batchDelete(List<TodoModel> todoItemList) {
   List<TodoModel> toRemove = [];
