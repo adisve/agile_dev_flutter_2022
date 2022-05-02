@@ -1,8 +1,8 @@
 import 'dart:math';
-
+import 'package:agile_dev_2022/api/task_api.dart';
+import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/todo_model.dart';
 import 'package:agile_dev_2022/widgets/card.dart';
-import 'package:agile_dev_2022/task.dart';
 import 'package:flutter/material.dart';
 import 'package:agile_dev_2022/database/database.dart';
 
@@ -15,10 +15,9 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
-  List<TodoModel> CheckedItems = [];
+  List<TodoModel> checkedItemList = [];
   late List<bool> isChecked;
-  late List<TodoModel> ToDoItemList = [];
-  final MyDB = MyDatabase();
+  late List<TodoModel> todoItemList = [];
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
       backgroundColor: Colors.blue,
       textStyle: TextStyle(color: Colors.white),
@@ -53,12 +52,12 @@ class _MyTaskPageState extends State<TaskPage> {
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: ToDoItemList.length,
+                itemCount: todoItemList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(children: [
                     TaskCard(
                       notifyParent: updateCheckedList,
-                      toDoItem: ToDoItemList[index],
+                      toDoItem: todoItemList[index],
                     ),
                     Divider(
                       indent: 35,
@@ -158,58 +157,31 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void addToDoItems(ToDoItemData toDoItemData) async {
-    await MyDB.inserToDoItem(toDoItemData.toCompanion(true));
+    await locator<MyDatabase>().inserToDoItem(toDoItemData.toCompanion(true));
   }
 
   void updateScreen() {
-    List<TodoModel> temp = [];
-    MyDB.getAllToDoItems().then((databaselist) {
-      for (var toDoItem in databaselist) {
-        temp.add(TodoModel(toDoItem.id, toDoItem.title, toDoItem.description,
-            toDoItem.priority, toDoItem.deadline, toDoItem.isDone, false));
-      }
-      setState(() {
-        ToDoItemList = temp;
-      });
-    });
-  }
-
-  Future<ToDoItemData> getToDoItem(int toDoId) async {
-    return await MyDB.getToDoItem(toDoId);
+    getTodoItemsFromDb().then((dbTodoItems) => setState(() {
+          todoItemList = dbTodoItems;
+        }));
   }
 
   void updateCheckedList(TodoModel todoModel) {
-    if (CheckedItems.contains(todoModel)) {
+    if (checkedItemList.contains(todoModel)) {
       setState(() {
-        CheckedItems.remove(todoModel);
+        checkedItemList.remove(todoModel);
       });
       return;
     }
     setState(() {
-      CheckedItems.add(todoModel);
+      checkedItemList.add(todoModel);
     });
   }
 
   void removeCheckedList() async {
-    var toRemove = [];
-    for (var item in ToDoItemList) {
-      if (item.isChecked) {
-        setState(() {
-          MyDB.deleteToDoItem(ToDoItemData(
-                  id: item.id,
-                  title: item.title,
-                  description: item.description,
-                  deadline: item.deadline,
-                  isDone: item.isDone,
-                  priority: item.priority)
-              .toCompanion(true));
-        });
-        toRemove.add(item);
-      }
-    }
+    List<TodoModel> toRemove = batchDelete(todoItemList);
     setState(() {
-      ToDoItemList.removeWhere((todo) => toRemove.contains(todo));
+      todoItemList.removeWhere((todo) => toRemove.contains(todo));
     });
-    toRemove.clear();
   }
 }
