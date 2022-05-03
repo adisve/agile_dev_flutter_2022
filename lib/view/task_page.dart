@@ -23,10 +23,15 @@ class _MyTaskPageState extends State<TaskPage> {
       backgroundColor: Colors.blue,
       textStyle: TextStyle(color: Colors.white),
       padding: EdgeInsets.all(8));
-  String valueText = "";
+
+  String descriptionValueText = "";
+  String titleValueText = "";
   String toDoTitle = "";
   String toDoDescription = "";
-  final controller = TextEditingController();
+
+  final priorityController = TextEditingController();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -98,7 +103,7 @@ class _MyTaskPageState extends State<TaskPage> {
                               MaterialStateProperty.all<Color>(Colors.blue),
                         ),
                         onPressed: () {
-                          createTask(context, controller);
+                          createTask(context, titleController);
                         },
                         child: Icon(Icons.add),
                       )),
@@ -120,10 +125,10 @@ class _MyTaskPageState extends State<TaskPage> {
               keyboardType: TextInputType.multiline,
               onChanged: (value) {
                 setState(() {
-                  valueText = value;
+                  titleValueText = value;
                 });
               },
-              controller: controller,
+              controller: titleController,
               decoration: InputDecoration(hintText: "Title"),
             ),
             actions: [
@@ -134,7 +139,7 @@ class _MyTaskPageState extends State<TaskPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () => setState(() {
-                  toDoTitle = valueText;
+                  toDoTitle = titleValueText;
                   controller.clear();
                   Navigator.pop(context);
                 }),
@@ -150,17 +155,29 @@ class _MyTaskPageState extends State<TaskPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Add description for ${todoModel.title}"),
-            content: TextField(
-              keyboardType: TextInputType.multiline,
-              onChanged: (value) {
-                setState(() {
-                  valueText = value;
-                });
-              },
-              controller: controller,
-              decoration: InputDecoration(hintText: "Description"),
-            ),
+            title: Text("Edit information for ${todoModel.title}"),
+            content: Column(children: [
+              TextField(
+                keyboardType: TextInputType.multiline,
+                onChanged: (value) {
+                  setState(() {
+                    titleValueText = value;
+                  });
+                },
+                controller: titleController,
+                decoration: InputDecoration(hintText: "Title"),
+              ),
+              TextField(
+                keyboardType: TextInputType.multiline,
+                onChanged: (value) {
+                  setState(() {
+                    descriptionValueText = value;
+                  });
+                },
+                controller: descriptionController,
+                decoration: InputDecoration(hintText: "Description"),
+              ),
+            ]),
             actions: [
               TextButton(
                 style: flatButtonStyle,
@@ -170,9 +187,11 @@ class _MyTaskPageState extends State<TaskPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    toDoDescription = valueText;
+                    toDoDescription = descriptionValueText;
+                    toDoTitle = titleValueText;
                   });
-                  controller.clear();
+                  descriptionController.clear();
+                  titleController.clear();
                   dev.log(toDoDescription);
                   Navigator.pop(context);
                 },
@@ -222,14 +241,17 @@ class _MyTaskPageState extends State<TaskPage> {
   }
 
   void editTaskParent(TodoModel todoModel) async {
-    await showEditDescription(context, controller, todoModel);
+    await showEditDescription(context, titleController, todoModel);
     if (toDoDescription == "") return;
     ToDoItemData itemToEdit =
         await locator<MyDatabase>().getToDoItem(todoModel.id);
+
     locator<MyDatabase>().updateToDoItem(ToDoItemData(
             id: itemToEdit.id,
-            title: itemToEdit.title,
-            description: toDoDescription,
+            title: toDoTitle == "" ? itemToEdit.title : toDoTitle,
+            description: toDoDescription == ""
+                ? itemToEdit.description
+                : toDoDescription,
             priority: itemToEdit.priority,
             deadline: itemToEdit.deadline,
             isDone: itemToEdit.isDone)
