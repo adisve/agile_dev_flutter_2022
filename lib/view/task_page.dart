@@ -155,7 +155,7 @@ class _MyTaskPageState extends State<TaskPage> {
               keyboardType: TextInputType.multiline,
               onChanged: (value) {
                 setState(() {
-                  toDoDescription = value;
+                  valueText = value;
                 });
               },
               controller: controller,
@@ -168,12 +168,14 @@ class _MyTaskPageState extends State<TaskPage> {
                   "Add",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () => setState(() {
-                  toDoDescription = valueText;
+                onPressed: () {
+                  setState(() {
+                    toDoDescription = valueText;
+                  });
                   controller.clear();
                   dev.log(toDoDescription);
                   Navigator.pop(context);
-                }),
+                },
               )
             ],
           );
@@ -221,13 +223,10 @@ class _MyTaskPageState extends State<TaskPage> {
 
   void editTaskParent(TodoModel todoModel) async {
     await showEditDescription(context, controller, todoModel);
-    dev.log(toDoDescription);
     if (toDoDescription == "") return;
+    ToDoItemData itemToEdit =
+        await locator<MyDatabase>().getToDoItem(todoModel.id);
     getTodoItemsFromDb().then((dbTodoItems) {
-      ToDoItemData itemToEdit = (dbTodoItems
-            ..singleWhere((todoItem) => todoItem.id == todoModel.id))
-          as ToDoItemData;
-      dev.log(itemToEdit.toString());
       locator<MyDatabase>().updateToDoItem(ToDoItemData(
               id: itemToEdit.id,
               title: itemToEdit.title,
