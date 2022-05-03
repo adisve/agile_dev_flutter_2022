@@ -154,17 +154,9 @@ class _MyTaskPageState extends State<TaskPage> {
       TextEditingController controller, TodoModel todoModel) async {
     // Initial Selected Value
 
-    int taskPriority;
-    if (todoModel.priority != null) {
-      taskPriority = todoModel.priority!;
-    } else {
-      taskPriority = 2;
-    }
-
-    String dropdownvalue = taskPriority.toString();
-
-    // List of items in our dropdown menu
-    var items = ['1', '2', '3'];
+    String taskPriority;
+    taskPriority =
+        todoModel.priority != null ? todoModel.priority!.toString() : "2";
 
     return showDialog(
         context: context,
@@ -192,15 +184,15 @@ class _MyTaskPageState extends State<TaskPage> {
                 controller: descriptionController,
                 decoration: InputDecoration(hintText: "Description"),
               ),
-              DropdownButton(
+              DropdownButtonFormField(
                 // Initial Value
-                value: dropdownvalue,
+                value: taskPriority,
 
                 // Down Arrow Icon
                 icon: const Icon(Icons.keyboard_arrow_down),
 
                 // Array list of items
-                items: items.map((String items) {
+                items: ['1', '2', '3'].map((String items) {
                   return DropdownMenuItem(
                     value: items,
                     child: Text(items),
@@ -208,13 +200,13 @@ class _MyTaskPageState extends State<TaskPage> {
                 }).toList(),
                 // After selecting the desired option,it will
                 // change button value to selected value
-                onChanged: (String? newValue) {
-                  setState(() {                    
-                    dropdownvalue = newValue!;
-                  });
-                },
+                onSaved: (String? newValue) => setState(() {
+                  taskPriority = newValue!;
+                }),
+                onChanged: (String? newValue) => setState(() {
+                  taskPriority = newValue!;
+                }),
               ),
-              
             ]),
             actions: [
               TextButton(
@@ -227,7 +219,7 @@ class _MyTaskPageState extends State<TaskPage> {
                   setState(() {
                     toDoDescription = descriptionValueText;
                     toDoTitle = titleValueText;
-                    toDoPriority = int.parse(dropdownvalue);
+                    toDoPriority = int.parse(taskPriority);
                     descriptionController.clear();
                     titleController.clear();
                   });
