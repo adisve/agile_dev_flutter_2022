@@ -28,6 +28,7 @@ class _MyTaskPageState extends State<TaskPage> {
   String titleValueText = "";
   String toDoTitle = "";
   String toDoDescription = "";
+  int toDoPriority = 2;
 
   final priorityController = TextEditingController();
   final titleController = TextEditingController();
@@ -151,6 +152,20 @@ class _MyTaskPageState extends State<TaskPage> {
 
   Future<void> showEditDescription(BuildContext context,
       TextEditingController controller, TodoModel todoModel) async {
+    // Initial Selected Value
+
+    int taskPriority;
+    if (todoModel.priority != null) {
+      taskPriority = todoModel.priority!;
+    } else {
+      taskPriority = 2;
+    }
+
+    String dropdownvalue = taskPriority.toString();
+
+    // List of items in our dropdown menu
+    var items = ['1', '2', '3'];
+
     return showDialog(
         context: context,
         builder: (context) {
@@ -177,6 +192,29 @@ class _MyTaskPageState extends State<TaskPage> {
                 controller: descriptionController,
                 decoration: InputDecoration(hintText: "Description"),
               ),
+              DropdownButton(
+                // Initial Value
+                value: dropdownvalue,
+
+                // Down Arrow Icon
+                icon: const Icon(Icons.keyboard_arrow_down),
+
+                // Array list of items
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                // After selecting the desired option,it will
+                // change button value to selected value
+                onChanged: (String? newValue) {
+                  setState(() {                    
+                    dropdownvalue = newValue!;
+                  });
+                },
+              ),
+              
             ]),
             actions: [
               TextButton(
@@ -189,6 +227,7 @@ class _MyTaskPageState extends State<TaskPage> {
                   setState(() {
                     toDoDescription = descriptionValueText;
                     toDoTitle = titleValueText;
+                    toDoPriority = int.parse(dropdownvalue);
                     descriptionController.clear();
                     titleController.clear();
                   });
