@@ -214,7 +214,7 @@ class _MyTaskPageState extends State<TaskPage> {
       return;
     }
     addToDoItems(
-        ToDoItemData(id: Random.secure().nextInt(1234), title: toDoTitle));
+        ToDoItemData(id: Random.secure().nextInt(123456), title: toDoTitle));
     setState(() {
       toDoTitle = "";
     });
@@ -226,16 +226,15 @@ class _MyTaskPageState extends State<TaskPage> {
     if (toDoDescription == "") return;
     ToDoItemData itemToEdit =
         await locator<MyDatabase>().getToDoItem(todoModel.id);
-    getTodoItemsFromDb().then((dbTodoItems) {
-      locator<MyDatabase>().updateToDoItem(ToDoItemData(
-              id: itemToEdit.id,
-              title: itemToEdit.title,
-              description: toDoDescription,
-              priority: itemToEdit.priority,
-              deadline: itemToEdit.deadline,
-              isDone: itemToEdit.isDone)
-          .toCompanion(true));
-    });
+    locator<MyDatabase>().updateToDoItem(ToDoItemData(
+            id: itemToEdit.id,
+            title: itemToEdit.title,
+            description: toDoDescription,
+            priority: itemToEdit.priority,
+            deadline: itemToEdit.deadline,
+            isDone: itemToEdit.isDone)
+        .toCompanion(true));
+
     setState(() {
       toDoDescription = "";
     });
