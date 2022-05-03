@@ -156,7 +156,7 @@ class _MyTaskPageState extends State<TaskPage> {
         builder: (context) {
           return AlertDialog(
             title: Text("Edit information for ${todoModel.title}"),
-            content: Column(children: [
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
               TextField(
                 keyboardType: TextInputType.multiline,
                 onChanged: (value) {
@@ -182,16 +182,17 @@ class _MyTaskPageState extends State<TaskPage> {
               TextButton(
                 style: flatButtonStyle,
                 child: Text(
-                  "Add",
+                  "Edit",
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   setState(() {
                     toDoDescription = descriptionValueText;
                     toDoTitle = titleValueText;
+                    descriptionController.clear();
+                    titleController.clear();
                   });
-                  descriptionController.clear();
-                  titleController.clear();
+
                   dev.log(toDoDescription);
                   Navigator.pop(context);
                 },
@@ -236,13 +237,14 @@ class _MyTaskPageState extends State<TaskPage> {
         ToDoItemData(id: Random.secure().nextInt(123456), title: toDoTitle));
     setState(() {
       toDoTitle = "";
+      titleValueText = "";
     });
     updateScreen();
   }
 
   void editTaskParent(TodoModel todoModel) async {
     await showEditDescription(context, titleController, todoModel);
-    if (toDoDescription == "") return;
+    if (toDoDescription == "" && toDoTitle == "") return;
     ToDoItemData itemToEdit =
         await locator<MyDatabase>().getToDoItem(todoModel.id);
 
@@ -259,6 +261,9 @@ class _MyTaskPageState extends State<TaskPage> {
 
     setState(() {
       toDoDescription = "";
+      toDoTitle = "";
+      titleValueText = "";
+      descriptionValueText = "";
     });
     updateScreen();
   }
