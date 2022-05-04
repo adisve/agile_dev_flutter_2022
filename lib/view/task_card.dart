@@ -42,6 +42,18 @@ class _TaskCardState extends State<TaskCard> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: Checkbox(
+                              fillColor:() {
+                                if (widget.toDoItem.priority == 1) {
+                                  return MaterialStateProperty.all<Color>(
+                                      Colors.red);
+                                }else if (widget.toDoItem.priority == 2) {
+                                  return MaterialStateProperty.all<Color>(
+                                      Colors.yellow);
+                                }else if (widget.toDoItem.priority == 3) {
+                                  return MaterialStateProperty.all<Color>(
+                                      Colors.blue);
+                                }                             
+                              }(),
                               key: UniqueKey(),
                               shape: CircleBorder(),
                               value: widget.toDoItem.isChecked,
@@ -81,7 +93,7 @@ class _TaskCardState extends State<TaskCard> {
                                 ),
                               );
                             }(),
-                        ]),
+                        ]),                      
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
