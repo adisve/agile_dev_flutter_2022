@@ -1,15 +1,10 @@
 import 'dart:math';
-
 import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/main.dart';
-import 'package:agile_dev_2022/model/todo_model.dart';
-import 'package:agile_dev_2022/view/task_card.dart';
 import 'package:agile_dev_2022/view/task_page.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test/expect.dart' as exp;
-import 'package:test/scaffolding.dart' as wid;
 
 void main() {
   locator.registerSingleton<MyDatabase>(MyDatabase());
