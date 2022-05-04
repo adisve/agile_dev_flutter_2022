@@ -16,7 +16,7 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 
   // Create a task
-  Future<int> inserToDoItem(ToDoItemCompanion ToDoItem) async {
+  Future<int> insertTodoItem(ToDoItemCompanion ToDoItem) async {
     return await into(toDoItem).insert(ToDoItem);
   }
 

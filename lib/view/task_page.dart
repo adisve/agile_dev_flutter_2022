@@ -8,9 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:agile_dev_2022/controller/database/database.dart';
 
 class TaskPage extends StatefulWidget {
-  const TaskPage({Key? key, required this.title}) : super(key: key);
+  const TaskPage({Key? key}) : super(key: key);
 
-  final String title;
   @override
   State<TaskPage> createState() => _MyTaskPageState();
 }
@@ -156,7 +155,6 @@ class _MyTaskPageState extends State<TaskPage> {
       TextEditingController controller, TodoModel todoModel) async {
     // Initial Selected Value
 
-    
     priorityValueText =
         todoModel.priority != null ? todoModel.priority!.toString() : "2";
 
@@ -185,14 +183,14 @@ class _MyTaskPageState extends State<TaskPage> {
                 },
                 controller: descriptionController,
                 decoration: InputDecoration(hintText: "Description"),
-              ),              
+              ),
               Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                          padding: EdgeInsets.only(top: 20, bottom: 2),
-                          child: Text("Priority:"),
-                        ),
-                    ),
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  padding: EdgeInsets.only(top: 20, bottom: 2),
+                  child: Text("Priority:"),
+                ),
+              ),
               DropdownButtonFormField(
                 // Initial Value
                 value: priorityValueText,
@@ -232,7 +230,6 @@ class _MyTaskPageState extends State<TaskPage> {
                     descriptionController.clear();
                     titleController.clear();
                   });
-                  
 
                   dev.log(toDoDescription);
                   Navigator.pop(context);

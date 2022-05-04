@@ -7,6 +7,13 @@ class TodoModel {
   final bool? isDone;
   bool isChecked;
 
-  TodoModel(this.id, this.title, this.description, this.priority, this.deadline,
-      this.isDone, this.isChecked);
+  TodoModel(
+    this.id,
+    this.title,
+    this.description,
+    this.priority,
+    this.deadline,
+    this.isDone,
+    this.isChecked,
+  );
 }
