@@ -26,9 +26,11 @@ class _MyTaskPageState extends State<TaskPage> {
 
   String descriptionValueText = "";
   String titleValueText = "";
+  String priorityValueText = "";
+
   String toDoTitle = "";
   String toDoDescription = "";
-  int toDoPriority = 2;
+  int toDoPriority = 0;
 
   final priorityController = TextEditingController();
   final titleController = TextEditingController();
@@ -154,8 +156,8 @@ class _MyTaskPageState extends State<TaskPage> {
       TextEditingController controller, TodoModel todoModel) async {
     // Initial Selected Value
 
-    String taskPriority;
-    taskPriority =
+    
+    priorityValueText =
         todoModel.priority != null ? todoModel.priority!.toString() : "2";
 
     return showDialog(
@@ -183,10 +185,17 @@ class _MyTaskPageState extends State<TaskPage> {
                 },
                 controller: descriptionController,
                 decoration: InputDecoration(hintText: "Description"),
-              ),
+              ),              
+              Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                          padding: EdgeInsets.only(top: 20, bottom: 2),
+                          child: Text("Priority:"),
+                        ),
+                    ),
               DropdownButtonFormField(
                 // Initial Value
-                value: taskPriority,
+                value: priorityValueText,
 
                 // Down Arrow Icon
                 icon: const Icon(Icons.keyboard_arrow_down),
@@ -201,10 +210,10 @@ class _MyTaskPageState extends State<TaskPage> {
                 // After selecting the desired option,it will
                 // change button value to selected value
                 onSaved: (String? newValue) => setState(() {
-                  taskPriority = newValue!;
+                  priorityValueText = newValue!;
                 }),
                 onChanged: (String? newValue) => setState(() {
-                  taskPriority = newValue!;
+                  priorityValueText = newValue!;
                 }),
               ),
             ]),
@@ -219,10 +228,11 @@ class _MyTaskPageState extends State<TaskPage> {
                   setState(() {
                     toDoDescription = descriptionValueText;
                     toDoTitle = titleValueText;
-                    toDoPriority = int.parse(taskPriority);
+                    toDoPriority = int.parse(priorityValueText);
                     descriptionController.clear();
                     titleController.clear();
                   });
+                  
 
                   dev.log(toDoDescription);
                   Navigator.pop(context);
@@ -275,7 +285,7 @@ class _MyTaskPageState extends State<TaskPage> {
 
   void editTaskParent(TodoModel todoModel) async {
     await showEditDescription(context, titleController, todoModel);
-    if (toDoDescription == "" && toDoTitle == "") return;
+    if (toDoDescription == "" && toDoTitle == "" && toDoPriority == 0) return;
     ToDoItemData itemToEdit =
         await locator<MyDatabase>().getToDoItem(todoModel.id);
 
@@ -285,7 +295,7 @@ class _MyTaskPageState extends State<TaskPage> {
             description: toDoDescription == ""
                 ? itemToEdit.description
                 : toDoDescription,
-            priority: itemToEdit.priority,
+            priority: toDoPriority == 0 ? itemToEdit.priority : toDoPriority,
             deadline: itemToEdit.deadline,
             isDone: itemToEdit.isDone)
         .toCompanion(true));
@@ -293,8 +303,10 @@ class _MyTaskPageState extends State<TaskPage> {
     setState(() {
       toDoDescription = "";
       toDoTitle = "";
+      toDoPriority = 0;
       titleValueText = "";
       descriptionValueText = "";
+      priorityValueText = "";
     });
     updateScreen();
   }
