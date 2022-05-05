@@ -38,5 +38,5 @@ Future<List<TodoModel>> getTodoItemsFromDb() async {
 }
 
 void addToDoItems(ToDoItemData toDoItemData) async {
-  await locator<MyDatabase>().inserToDoItem(toDoItemData.toCompanion(true));
+  await locator<MyDatabase>().insertTodoItem(toDoItemData.toCompanion(true));
 }
