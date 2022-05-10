@@ -3,7 +3,7 @@ class TodoModel {
   final String title;
   final String? description;
   final int? priority;
-  final String? deadline;
+  final String? createdDate;
   final bool? isDone;
   bool isChecked;
 
@@ -12,7 +12,7 @@ class TodoModel {
     this.title,
     this.description,
     this.priority,
-    this.deadline,
+    this.createdDate,
     this.isDone,
     this.isChecked,
   );

@@ -4,33 +4,12 @@ CREATE TABLE IF NOT EXISTS
         title VARCHAR(80) NOT NULL,
         description TEXT,
         priority INTEGER DEFAULT 2,
-        deadline TEXT,
+        createdDate TEXT,
         isDone BOOLEAN CHECK (isDone IN (0, 1))
 );
 
-insert_dummy_rows: 
-    INSERT INTO ToDoItem (title, description, priority, deadline, isDone)
-    VALUES 
-    ('Return book', 'Library working hours - 8-20', 3, DATE('now'), 0),
-    ('Read 50 p from students book', 'The book is on Canvas', 1, '2016-08-01', 0);
-
-insert_more_dummies: 
-    INSERT INTO ToDoItem (title, description, deadline, isDone)
-    VALUES 
-    ('Do laundry', NULL, DATE('now'), 0);
-
-add_task: 
-    INSERT INTO ToDoItem (title, description, priority, deadline, isDone)
-    VALUES 
-    (:title, :description, :priority, :deadline, :isDone);
-
-delete_task:
-    DELETE FROM ToDoItem WHERE id = :id;
-
-update_task:
-    UPDATE ToDoItem
-    SET title = :title, description = :description, priority = :priority, deadline = :deadline, isDone = :isDone
-    WHERE id = :id;
-
-fetch_tasks:
-    SELECT * FROM ToDoItem;
+CREATE TABLE IF NOT EXISTS
+    StashedTask(
+        createdDate TEXT,
+        isDone BOOLEAN
+);
