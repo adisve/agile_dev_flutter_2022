@@ -20,6 +20,7 @@ dependencies:
   path_provider: ^2.0.0
   path: ^1.8.0
   test: any
+  syncfusion_flutter_charts: ^20.1.52
 
 
 dev_dependencies:
