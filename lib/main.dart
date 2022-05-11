@@ -21,9 +21,6 @@ void setup() async {
   locator.registerSingleton<MyDatabase>(MyDatabase());
   getAllStashedTasks().then((_stashedTasksList) {
     for (var task in _stashedTasksList) {
-      log((DateTime.now().day - DateTime.parse(task.createdDate!).day)
-          .toString());
-
       /// Compare the current date day (int) to the one in the created date.
       /// If it's more than a week, then we don't want it in the graph.
       /// Currently not entirely sure that this works (what happens when we change months?)
@@ -68,14 +65,18 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Color.fromRGBO(189, 212, 231, 1.0),
+          backgroundColor: Color.fromRGBO(233, 241, 247, 1.0),
         ),
         home: Scaffold(
           resizeToAvoidBottomInset: false,
           body: _currentPage,
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Color.fromRGBO(189, 212, 231, 1.0),
+            elevation: 50,
+            unselectedItemColor: Color.fromRGBO(99, 112, 116, 1.0),
+            selectedItemColor: Color.fromARGB(255, 56, 57, 57),
             onTap: (index) => changePage(index),
             currentIndex: _currentIndex,
             items: [

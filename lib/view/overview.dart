@@ -38,21 +38,28 @@ class _OverviewState extends State<Overview> {
 
   @override
   void initState() {
-    middleMan();
+    if (mounted) {
+      middleMan();
+    }
+
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
 
   void middleMan() async {
     getFinishedTasksForWeek().then((weekChart) {
-      setState(() {
-        _weekdaysAndFinishedTasksToChartModel = weekChart;
-      });
+      if (mounted) {
+        setState(() {
+          _weekdaysAndFinishedTasksToChartModel = weekChart;
+        });
+      }
     });
     getUnfinishedTasksForWeek().then((weekChart) {
-      setState(() {
-        _weekdaysAndUnfinishedTasksToChartModel = weekChart;
-      });
+      if (mounted) {
+        setState(() {
+          _weekdaysAndUnfinishedTasksToChartModel = weekChart;
+        });
+      }
     });
   }
 
@@ -63,6 +70,7 @@ class _OverviewState extends State<Overview> {
             body: Center(
             child: Container(
                 child: SfCartesianChart(
+                    plotAreaBorderColor: Color.fromRGBO(33, 34, 39, 1.0),
                     // Initialize category axis
                     primaryXAxis: CategoryAxis(),
                     // Chart title
@@ -71,17 +79,22 @@ class _OverviewState extends State<Overview> {
                     legend: Legend(isVisible: true),
                     // Enable tooltip
                     tooltipBehavior: _tooltipBehavior,
-                    series: <LineSeries<ChartModel, String>>[
-                  LineSeries<ChartModel, String>(
-                      color: Colors.green,
+                    series: <BarSeries<ChartModel, String>>[
+                  BarSeries<ChartModel, String>(
+                      name: "Completed tasks",
+                      legendItemText: "Completed tasks",
+                      color: Color.fromRGBO(239, 156, 218, 0.937),
                       // Bind data source
                       dataSource: _weekdaysAndFinishedTasksToChartModel!,
                       xValueMapper: (ChartModel chartModel, _) =>
                           chartModel.weekday,
                       yValueMapper: (ChartModel chartModel, _) =>
                           chartModel.tasksAccomplished),
-                  LineSeries<ChartModel, String>(
-                      color: Colors.red,
+                  BarSeries<ChartModel, String>(
+                      name: "Unfinished Tasks",
+                      enableTooltip: true,
+                      legendItemText: "Unfinished Tasks",
+                      color: Color.fromRGBO(137, 161, 239, 0.937),
                       // Bind data source
                       dataSource: _weekdaysAndUnfinishedTasksToChartModel!,
                       xValueMapper: (ChartModel chartModel, _) =>
