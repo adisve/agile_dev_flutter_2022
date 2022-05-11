@@ -71,7 +71,7 @@ class _TaskCardState extends State<TaskCard> {
                                 top: 12,
                               ),
                               child: Text(
-                                widget.toDoItem.title.length < 15
+                                widget.toDoItem.title.length < 25
                                     ? widget.toDoItem.title
                                     : widget.toDoItem.title.substring(0, 15) +
                                         "...",

@@ -5,6 +5,7 @@ import 'package:agile_dev_2022/controller/task_api.dart';
 import 'package:agile_dev_2022/model/chartmodel.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -28,9 +29,10 @@ class _OverviewState extends State<Overview> {
   }
 
   void middleMan() async {
-    var temp = await getTasksForWeek();
-    setState(() {
-      _weekdaysAndTasksToChartModel = temp;
+    getTasksForWeek().then((weekChart) {
+      setState(() {
+        _weekdaysAndTasksToChartModel = weekChart;
+      });
     });
   }
 
@@ -58,8 +60,9 @@ class _OverviewState extends State<Overview> {
                     yValueMapper: (ChartModel chartModel, _) =>
                         chartModel.tasksAccomplished)
               ]))))
-        : Text("Nothing to show here");
-    ;
+        : Center(
+            child: SpinKitWave(color: Colors.amber),
+          );
   }
 
   Future<List<ChartModel>> getTasksForWeek() async {
@@ -73,6 +76,7 @@ class _OverviewState extends State<Overview> {
       "Saturday": 0,
       "Sunday": 0
     };
+    await Future.delayed(Duration(milliseconds: 500));
 
     for (var task in stashedTasks) {
       if (task.isDone!) {
