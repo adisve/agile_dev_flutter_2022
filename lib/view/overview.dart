@@ -86,7 +86,7 @@ class _OverviewState extends State<Overview> {
     }
     List<ChartModel> temp = [];
     _weekdaysAndTasksAccomplished.forEach((key, value) {
-      temp.add(ChartModel(key, value));
+      temp.add(ChartModel(key.substring(0, 3), value));
     });
     return temp;
   }

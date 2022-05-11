@@ -35,50 +35,52 @@ class _TaskCardState extends State<TaskCard> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Checkbox(
-                              fillColor:() {
-                                if (widget.toDoItem.priority == 1) {
-                                  return MaterialStateProperty.all<Color>(
-                                      Colors.red);
-                                }else if (widget.toDoItem.priority == 2) {
-                                  return MaterialStateProperty.all<Color>(
-                                      Colors.yellow);
-                                }else if (widget.toDoItem.priority == 3) {
-                                  return MaterialStateProperty.all<Color>(
-                                      Colors.blue);
-                                }                             
-                              }(),
-                              key: UniqueKey(),
-                              shape: CircleBorder(),
-                              value: widget.toDoItem.isChecked,
-                              onChanged: (newValue) {
-                                widget.notifyParent(widget.toDoItem);
-                                setState(() {
-                                  widget.toDoItem.isChecked = newValue!;
-                                });
-                              },
+                    Expanded(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Checkbox(
+                                fillColor: () {
+                                  if (widget.toDoItem.priority == 1) {
+                                    return MaterialStateProperty.all<Color>(
+                                        Colors.red);
+                                  } else if (widget.toDoItem.priority == 2) {
+                                    return MaterialStateProperty.all<Color>(
+                                        Colors.yellow);
+                                  } else if (widget.toDoItem.priority == 3) {
+                                    return MaterialStateProperty.all<Color>(
+                                        Colors.blue);
+                                  }
+                                }(),
+                                key: UniqueKey(),
+                                shape: CircleBorder(),
+                                value: widget.toDoItem.isChecked,
+                                onChanged: (newValue) {
+                                  widget.notifyParent(widget.toDoItem);
+                                  setState(() {
+                                    widget.toDoItem.isChecked = newValue!;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 12,
-                            ),
-                            child: Text(
-                              widget.toDoItem.title,
-                              maxLines: 1, // Don't wrap at all
-                              softWrap: false,
-                              overflow: TextOverflow.fade,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 20),
-                            ),
-                          )
-                        ]),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 12,
+                              ),
+                              child: Text(
+                                widget.toDoItem.title,
+                                maxLines: 1, // Don't wrap at all
+                                softWrap: false,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                              ),
+                            )
+                          ]),
+                    ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -93,7 +95,7 @@ class _TaskCardState extends State<TaskCard> {
                                 ),
                               );
                             }(),
-                        ]),                      
+                        ]),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
