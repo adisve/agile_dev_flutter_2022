@@ -61,6 +61,7 @@ Future<ToDoItemData> getToDoItem(int toDoId) async {
 Future<List<TodoModel>> getTodoItemsFromDb() async {
   List<TodoModel> temp = [];
   locator<MyDatabase>().getAllToDoItems().then((databaselist) {
+    databaselist.sort((a, b) => a.priority!.compareTo(b.priority!));
     for (var toDoItem in databaselist) {
       temp.add(TodoModel(toDoItem.id, toDoItem.title, toDoItem.description,
           toDoItem.priority, toDoItem.createdDate, toDoItem.isDone, false));
