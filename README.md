@@ -1,13 +1,9 @@
 <div id="top"></div>
 
-<div align="center"><a href=contributors-url>Contributors</a>&emsp;&emsp;<a href=forks-url>Forks</a>&emsp;&emsp;<a href=stars-url>Stargazers</a>&emsp;&emsp;<a href=issues-url>Issues</a>&emsp;&emsp;<a href=license-url>MIT License</a></div>
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/adisve/agile_dev_flutter_2022">
-    <img src="/android/app/src/main/res/drawable/res_ic_launcher.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Agile Development 2022</h3>
