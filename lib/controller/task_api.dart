@@ -6,7 +6,7 @@ List<TodoModel> batchDelete(List<TodoModel> todoItemList) {
   List<TodoModel> toRemove = [];
   for (var item in todoItemList) {
     if (item.isChecked) {
-      locator<MyDatabase>().deleteToDoItem(ToDoItemData(
+      locator<MyDatabase>().moveTodoItem(ToDoItemData(
               id: item.id,
               title: item.title,
               description: item.description,
@@ -15,6 +15,14 @@ List<TodoModel> batchDelete(List<TodoModel> todoItemList) {
               priority: item.priority)
           .toCompanion(true));
       toRemove.add(item);
+      locator<MyDatabase>().deleteToDoItem(ToDoItemData(
+              id: item.id,
+              title: item.title,
+              description: item.description,
+              createdDate: item.createdDate,
+              isDone: false,
+              priority: item.priority)
+          .toCompanion(true));
     }
   }
   return toRemove;

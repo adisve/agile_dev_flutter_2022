@@ -16,7 +16,7 @@ void main() {
 }
 
 /// Initialise global instance of database instead of locally
-/// creating variables in individual classes
+/// creating variables in individual classes.
 void setup() async {
   locator.registerSingleton<MyDatabase>(MyDatabase());
   getAllStashedTasks().then((_stashedTasksList) {
