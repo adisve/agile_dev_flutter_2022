@@ -48,11 +48,10 @@ class _MyTaskPageState extends State<TaskPage> {
         body: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(top: 20, left: 35, bottom: 10),
+              padding: EdgeInsets.only(top: 50, left: 35),
               alignment: Alignment.topLeft,
               child: const Text(
                 "Today",
-                maxLines: 2,
                 style: TextStyle(
                     fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
               ),

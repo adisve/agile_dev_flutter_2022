@@ -67,6 +67,11 @@ Future<List<StashedTaskData>> getAllStashedTasks() async {
   return await locator<MyDatabase>().getAllStashedTaskItems();
 }
 
+void deleteStashedTask(StashedTaskData stashedTaskData) async {
+  await locator<MyDatabase>()
+      .deleteStashedTask(stashedTaskData.toCompanion(true));
+}
+
 void addToDoItems(ToDoItemData toDoItemData) async {
   await locator<MyDatabase>().insertTodoItem(toDoItemData.toCompanion(true));
 }

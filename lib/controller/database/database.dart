@@ -40,7 +40,8 @@ class MyDatabase extends _$MyDatabase {
   Future<int> moveTodoItem(ToDoItemCompanion toDoItemCompanion) async {
     return await insertStashedTask(StashedTaskCompanion(
         createdDate: toDoItemCompanion.createdDate,
-        isDone: toDoItemCompanion.isDone));
+        isDone: toDoItemCompanion.isDone,
+        id: toDoItemCompanion.id));
   }
 
   // Mark task as done
@@ -62,12 +63,17 @@ class MyDatabase extends _$MyDatabase {
       StashedTaskCompanion stashedTaskCompanion) async {
     return await into(stashedTask).insert(stashedTaskCompanion);
   }
+
+  Future<int> deleteStashedTask(
+      StashedTaskCompanion stashedTaskCompanion) async {
+    return await delete(stashedTask).delete(stashedTaskCompanion);
+  }
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFold = await getApplicationDocumentsDirectory();
-    final file = File(path.join(dbFold.path, 'db.sqlite2'));
+    final file = File(path.join(dbFold.path, 'db.sqlite3'));
     return NativeDatabase(file);
   });
 }

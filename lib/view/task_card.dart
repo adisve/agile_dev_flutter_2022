@@ -71,8 +71,11 @@ class _TaskCardState extends State<TaskCard> {
                                 top: 12,
                               ),
                               child: Text(
-                                widget.toDoItem.title,
-                                maxLines: 1, // Don't wrap at all
+                                widget.toDoItem.title.length < 15
+                                    ? widget.toDoItem.title
+                                    : widget.toDoItem.title.substring(0, 15) +
+                                        "...",
+                                maxLines: 1,
                                 softWrap: false,
                                 overflow: TextOverflow.fade,
                                 style: const TextStyle(

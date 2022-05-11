@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     StashedTask(
         createdDate TEXT,
-        isDone BOOLEAN
+        isDone BOOLEAN,
+        id INTEGER PRIMARY KEY
 );

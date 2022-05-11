@@ -348,7 +348,8 @@ class ToDoItem extends Table with TableInfo<ToDoItem, ToDoItemData> {
 class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
   final String? createdDate;
   final bool? isDone;
-  StashedTaskData({this.createdDate, this.isDone});
+  final int id;
+  StashedTaskData({this.createdDate, this.isDone, required this.id});
   factory StashedTaskData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -357,6 +358,8 @@ class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}createdDate']),
       isDone: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}isDone']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
     );
   }
   @override
@@ -368,6 +371,7 @@ class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
     if (!nullToAbsent || isDone != null) {
       map['isDone'] = Variable<bool?>(isDone);
     }
+    map['id'] = Variable<int>(id);
     return map;
   }
 
@@ -378,6 +382,7 @@ class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
           : Value(createdDate),
       isDone:
           isDone == null && nullToAbsent ? const Value.absent() : Value(isDone),
+      id: Value(id),
     );
   }
 
@@ -387,6 +392,7 @@ class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
     return StashedTaskData(
       createdDate: serializer.fromJson<String?>(json['createdDate']),
       isDone: serializer.fromJson<bool?>(json['isDone']),
+      id: serializer.fromJson<int>(json['id']),
     );
   }
   @override
@@ -395,59 +401,69 @@ class StashedTaskData extends DataClass implements Insertable<StashedTaskData> {
     return <String, dynamic>{
       'createdDate': serializer.toJson<String?>(createdDate),
       'isDone': serializer.toJson<bool?>(isDone),
+      'id': serializer.toJson<int>(id),
     };
   }
 
-  StashedTaskData copyWith({String? createdDate, bool? isDone}) =>
+  StashedTaskData copyWith({String? createdDate, bool? isDone, int? id}) =>
       StashedTaskData(
         createdDate: createdDate ?? this.createdDate,
         isDone: isDone ?? this.isDone,
+        id: id ?? this.id,
       );
   @override
   String toString() {
     return (StringBuffer('StashedTaskData(')
           ..write('createdDate: $createdDate, ')
-          ..write('isDone: $isDone')
+          ..write('isDone: $isDone, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(createdDate, isDone);
+  int get hashCode => Object.hash(createdDate, isDone, id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is StashedTaskData &&
           other.createdDate == this.createdDate &&
-          other.isDone == this.isDone);
+          other.isDone == this.isDone &&
+          other.id == this.id);
 }
 
 class StashedTaskCompanion extends UpdateCompanion<StashedTaskData> {
   final Value<String?> createdDate;
   final Value<bool?> isDone;
+  final Value<int> id;
   const StashedTaskCompanion({
     this.createdDate = const Value.absent(),
     this.isDone = const Value.absent(),
+    this.id = const Value.absent(),
   });
   StashedTaskCompanion.insert({
     this.createdDate = const Value.absent(),
     this.isDone = const Value.absent(),
+    this.id = const Value.absent(),
   });
   static Insertable<StashedTaskData> custom({
     Expression<String?>? createdDate,
     Expression<bool?>? isDone,
+    Expression<int>? id,
   }) {
     return RawValuesInsertable({
       if (createdDate != null) 'createdDate': createdDate,
       if (isDone != null) 'isDone': isDone,
+      if (id != null) 'id': id,
     });
   }
 
   StashedTaskCompanion copyWith(
-      {Value<String?>? createdDate, Value<bool?>? isDone}) {
+      {Value<String?>? createdDate, Value<bool?>? isDone, Value<int>? id}) {
     return StashedTaskCompanion(
       createdDate: createdDate ?? this.createdDate,
       isDone: isDone ?? this.isDone,
+      id: id ?? this.id,
     );
   }
 
@@ -460,6 +476,9 @@ class StashedTaskCompanion extends UpdateCompanion<StashedTaskData> {
     if (isDone.present) {
       map['isDone'] = Variable<bool?>(isDone.value);
     }
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     return map;
   }
 
@@ -467,7 +486,8 @@ class StashedTaskCompanion extends UpdateCompanion<StashedTaskData> {
   String toString() {
     return (StringBuffer('StashedTaskCompanion(')
           ..write('createdDate: $createdDate, ')
-          ..write('isDone: $isDone')
+          ..write('isDone: $isDone, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
@@ -491,8 +511,14 @@ class StashedTask extends Table with TableInfo<StashedTask, StashedTaskData> {
       type: const BoolType(),
       requiredDuringInsert: false,
       $customConstraints: '');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      $customConstraints: 'PRIMARY KEY');
   @override
-  List<GeneratedColumn> get $columns => [createdDate, isDone];
+  List<GeneratedColumn> get $columns => [createdDate, isDone, id];
   @override
   String get aliasedName => _alias ?? 'StashedTask';
   @override
@@ -512,11 +538,14 @@ class StashedTask extends Table with TableInfo<StashedTask, StashedTaskData> {
       context.handle(_isDoneMeta,
           isDone.isAcceptableOrUnknown(data['isDone']!, _isDoneMeta));
     }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   StashedTaskData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return StashedTaskData.fromData(data,
