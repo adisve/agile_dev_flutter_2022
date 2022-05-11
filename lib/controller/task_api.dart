@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';

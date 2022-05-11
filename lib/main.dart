@@ -4,7 +4,6 @@ import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/controller/task_api.dart';
 import 'package:agile_dev_2022/view/overview.dart';
 import 'package:agile_dev_2022/view/task_page.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
