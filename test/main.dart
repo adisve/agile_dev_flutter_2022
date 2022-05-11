@@ -27,10 +27,14 @@ void main() {
 
     test('Test GET request', () async {
       int id = Random.secure().nextInt(12343);
+      String createdDate = DateTime.now().toIso8601String();
       await locator<MyDatabase>().insertTodoItem(
-          ToDoItemData(id: id, title: "TEST").toCompanion(true));
-      expect(await locator<MyDatabase>().getToDoItem(id),
-          ToDoItemData(id: id, title: "TEST", priority: 2));
+          ToDoItemData(id: id, title: "TEST", createdDate: createdDate)
+              .toCompanion(true));
+      expect(
+          await locator<MyDatabase>().getToDoItem(id),
+          ToDoItemData(
+              id: id, title: "TEST", priority: 2, createdDate: createdDate));
 
       // DELETE from database after test
       locator<MyDatabase>().deleteToDoItem(ToDoItemCompanion(id: Value(id)));
@@ -61,8 +65,11 @@ void main() {
   group('task_api testing', () {
     test('Testing getToDoItem', () async {
       int todoID = Random.secure().nextInt(12343);
-      await locator<MyDatabase>().insertTodoItem(
-          ToDoItemData(id: todoID, title: "Hello there").toCompanion(false));
+      await locator<MyDatabase>().insertTodoItem(ToDoItemData(
+              id: todoID,
+              title: "Hello there",
+              createdDate: DateTime.now().toIso8601String())
+          .toCompanion(false));
 
       expect(await getToDoItem(todoID),
           await locator<MyDatabase>().getToDoItem(todoID));
@@ -76,13 +83,21 @@ void main() {
       int id2 = Random.secure().nextInt(12343);
       int id3 = Random.secure().nextInt(12343);
 
-      await locator<MyDatabase>().insertTodoItem(
-          ToDoItemData(id: id1, title: "Hello there").toCompanion(false));
-      await locator<MyDatabase>().insertTodoItem(
-          ToDoItemData(id: id2, title: "General Kenobi...").toCompanion(false));
-      await locator<MyDatabase>().insertTodoItem(
-          ToDoItemData(id: id3, title: "You are a bold one")
-              .toCompanion(false));
+      await locator<MyDatabase>().insertTodoItem(ToDoItemData(
+              id: id1,
+              title: "Hello there",
+              createdDate: DateTime.now().toIso8601String())
+          .toCompanion(false));
+      await locator<MyDatabase>().insertTodoItem(ToDoItemData(
+              id: id2,
+              title: "General Kenobi...",
+              createdDate: DateTime.now().toIso8601String())
+          .toCompanion(false));
+      await locator<MyDatabase>().insertTodoItem(ToDoItemData(
+              id: id3,
+              title: "You are a bold one",
+              createdDate: DateTime.now().toIso8601String())
+          .toCompanion(false));
 
       List todoList = [];
       List<TodoModel> testModelList = [];
@@ -104,8 +119,10 @@ void main() {
 
     test('Testing addToDoItems', () async {
       int todoID = Random.secure().nextInt(12343);
-      addToDoItems(
-          ToDoItemData(id: todoID, title: "Do or do not, there is no try"));
+      addToDoItems(ToDoItemData(
+          id: todoID,
+          title: "Do or do not, there is no try",
+          createdDate: DateTime.now().toIso8601String()));
 
       expect(await getToDoItem(todoID),
           await locator<MyDatabase>().getToDoItem(todoID));

@@ -48,11 +48,10 @@ class _MyTaskPageState extends State<TaskPage> {
         body: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(top: 20, left: 35, bottom: 10),
+              padding: EdgeInsets.only(top: 50, left: 35),
               alignment: Alignment.topLeft,
               child: const Text(
                 "Today",
-                maxLines: 2,
                 style: TextStyle(
                     fontSize: 40, color: Color.fromARGB(255, 18, 130, 222)),
               ),
@@ -80,20 +79,40 @@ class _MyTaskPageState extends State<TaskPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                      padding: EdgeInsets.only(left: 30, bottom: 40),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.red),
-                        ),
-                        onPressed: () {
-                          removeCheckedList();
-                        },
-                        child: Icon(Icons.delete),
-                      )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                          padding: EdgeInsets.only(left: 30, bottom: 40),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Colors.red),
+                            ),
+                            onPressed: () {
+                              removeCheckedList();
+                            },
+                            child: Icon(Icons.delete),
+                          )),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                          padding: EdgeInsets.only(left: 30, bottom: 40),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                            ),
+                            onPressed: () {
+                              finishTasks();
+                            },
+                            child: Icon(Icons.check),
+                          )),
+                    ),
+                  ],
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
@@ -258,21 +277,16 @@ class _MyTaskPageState extends State<TaskPage> {
     });
   }
 
-  void removeCheckedList() async {
-    List<TodoModel> toRemove = batchDelete(todoItemList);
-    setState(() {
-      todoItemList.removeWhere((todo) => toRemove.contains(todo));
-    });
-  }
-
   void createTask(
       BuildContext context, TextEditingController controller) async {
     await showCreateToDoItem(context, controller);
     if (toDoTitle == "") {
       return;
     }
-    addToDoItems(
-        ToDoItemData(id: Random.secure().nextInt(123456), title: toDoTitle));
+    addToDoItems(ToDoItemData(
+        id: Random.secure().nextInt(123456),
+        title: toDoTitle,
+        createdDate: DateTime.now().toIso8601String()));
     setState(() {
       toDoTitle = "";
       titleValueText = "";
@@ -293,7 +307,7 @@ class _MyTaskPageState extends State<TaskPage> {
                 ? itemToEdit.description
                 : toDoDescription,
             priority: toDoPriority == 0 ? itemToEdit.priority : toDoPriority,
-            deadline: itemToEdit.deadline,
+            createdDate: itemToEdit.createdDate,
             isDone: itemToEdit.isDone)
         .toCompanion(true));
 
@@ -306,5 +320,19 @@ class _MyTaskPageState extends State<TaskPage> {
       priorityValueText = "";
     });
     updateScreen();
+  }
+
+  void removeCheckedList() async {
+    List<TodoModel> toRemove = batchDelete(todoItemList);
+    setState(() {
+      todoItemList.removeWhere((todo) => toRemove.contains(todo));
+    });
+  }
+
+  void finishTasks() {
+    List<TodoModel> toFinish = batchFinish(todoItemList);
+    setState(() {
+      todoItemList.removeWhere((todo) => toFinish.contains(todo));
+    });
   }
 }
