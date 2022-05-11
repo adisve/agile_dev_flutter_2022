@@ -77,74 +77,74 @@ class _MyTaskPageState extends State<TaskPage> {
                 },
               ),
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 30, bottom: 20),
-                            child: NiceButtons(
-                              endColor: Color.fromARGB(255, 164, 45, 65),
-                              borderColor: Color.fromARGB(255, 164, 45, 65),
-                              startColor: Color.fromARGB(255, 164, 45, 65),
-                              width: 60,
-                              height: 40,
-                              stretch: false,
-                              onTap: (finish) {
-                                removeCheckedList();
-                              },
-                              child: Icon(Icons.remove_circle,
-                                  color: Colors.white),
-                            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 30, bottom: 20),
+                          child: NiceButtons(
+                            endColor: Color.fromARGB(255, 164, 45, 65),
+                            borderColor: Color.fromARGB(255, 164, 45, 65),
+                            startColor: Color.fromARGB(255, 164, 45, 65),
+                            width: 60,
+                            height: 40,
+                            stretch: false,
+                            onTap: (finish) {
+                              removeCheckedList();
+                            },
+                            child:
+                                Icon(Icons.remove_circle, color: Colors.white),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 30, bottom: 20),
-                            child: NiceButtons(
-                              endColor: Color.fromARGB(255, 45, 164, 83),
-                              borderColor: Color.fromARGB(255, 45, 164, 83),
-                              startColor: Color.fromARGB(255, 45, 164, 83),
-                              width: 60,
-                              height: 40,
-                              stretch: false,
-                              onTap: (finish) {
-                                finishTasks();
-                              },
-                              child: Icon(Icons.done, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      padding: EdgeInsets.only(right: 30, bottom: 20),
-                      child: NiceButtons(
-                        endColor: Color.fromARGB(255, 67, 175, 205),
-                        borderColor: Color.fromARGB(255, 67, 175, 205),
-                        startColor: Color.fromARGB(255, 67, 175, 205),
-                        width: 60,
-                        height: 40,
-                        stretch: false,
-                        onTap: (finish) {
-                          createTask(context, titleController);
-                        },
-                        child: Icon(Icons.add, color: Colors.white),
                       ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 30, bottom: 20),
+                          child: NiceButtons(
+                            endColor: Color.fromARGB(255, 45, 164, 83),
+                            borderColor: Color.fromARGB(255, 45, 164, 83),
+                            startColor: Color.fromARGB(255, 45, 164, 83),
+                            width: 60,
+                            height: 40,
+                            stretch: false,
+                            onTap: (finish) {
+                              finishTasks();
+                            },
+                            child: Icon(Icons.done, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    padding: EdgeInsets.only(right: 30, bottom: 20),
+                    child: NiceButtons(
+                      endColor: Color.fromARGB(255, 67, 175, 205),
+                      borderColor: Color.fromARGB(255, 67, 175, 205),
+                      startColor: Color.fromARGB(255, 67, 175, 205),
+                      width: 60,
+                      height: 40,
+                      stretch: false,
+                      onTap: (finish) {
+                        createTask(context, titleController);
+                      },
+                      child: Icon(Icons.add, color: Colors.white),
                     ),
                   ),
-                ],
-              ),
-            )
+                ),
+              ],
+            ),
           ],
         ));
   }
