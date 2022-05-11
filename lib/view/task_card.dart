@@ -32,7 +32,6 @@ class _TaskCardState extends State<TaskCard> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Card(
-              color: Color.fromARGB(255, 173, 206, 233),
               elevation: 0,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
