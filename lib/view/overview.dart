@@ -24,6 +24,15 @@ class _OverviewState extends State<Overview> {
     "Saturday": 0,
     "Sunday": 0
   };
+  late Map<String, int> _weekdaysAndTasksNotAccomplished = {
+    "Monday": 0,
+    "Tuesday": 0,
+    "Wednesday": 0,
+    "Thursday": 0,
+    "Friday": 0,
+    "Saturday": 0,
+    "Sunday": 0
+  };
   List<ChartModel>? _weekdaysAndFinishedTasksToChartModel;
   List<ChartModel>? _weekdaysAndUnfinishedTasksToChartModel;
 
@@ -64,7 +73,7 @@ class _OverviewState extends State<Overview> {
                     tooltipBehavior: _tooltipBehavior,
                     series: <LineSeries<ChartModel, String>>[
                   LineSeries<ChartModel, String>(
-                      color: Colors.greenAccent,
+                      color: Colors.green,
                       // Bind data source
                       dataSource: _weekdaysAndFinishedTasksToChartModel!,
                       xValueMapper: (ChartModel chartModel, _) =>
@@ -72,7 +81,7 @@ class _OverviewState extends State<Overview> {
                       yValueMapper: (ChartModel chartModel, _) =>
                           chartModel.tasksAccomplished),
                   LineSeries<ChartModel, String>(
-                      color: Colors.redAccent,
+                      color: Colors.red,
                       // Bind data source
                       dataSource: _weekdaysAndUnfinishedTasksToChartModel!,
                       xValueMapper: (ChartModel chartModel, _) =>
@@ -114,15 +123,15 @@ class _OverviewState extends State<Overview> {
     for (var task in stashedTasks) {
       if (!task.isDone!) {
         log(DateFormat('EEEE').format(DateTime.parse(task.createdDate!)));
-        _weekdaysAndTasksAccomplished[
+        _weekdaysAndTasksNotAccomplished[
                 DateFormat('EEEE').format(DateTime.parse(task.createdDate!))] =
-            _weekdaysAndTasksAccomplished[DateFormat('EEEE')
+            _weekdaysAndTasksNotAccomplished[DateFormat('EEEE')
                     .format(DateTime.parse(task.createdDate!))]! +
                 1;
       }
     }
     List<ChartModel> temp = [];
-    _weekdaysAndTasksAccomplished.forEach((key, value) {
+    _weekdaysAndTasksNotAccomplished.forEach((key, value) {
       temp.add(ChartModel(key.substring(0, 3), value));
     });
     return temp;
