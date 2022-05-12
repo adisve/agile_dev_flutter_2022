@@ -4,8 +4,10 @@ import 'package:agile_dev_2022/controller/task_api.dart';
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:agile_dev_2022/view/task_card.dart';
+import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:agile_dev_2022/controller/database/database.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nice_buttons/nice_buttons.dart';
 
 class TaskPage extends StatefulWidget {
@@ -20,7 +22,7 @@ class _MyTaskPageState extends State<TaskPage> {
   late List<bool> isChecked;
   late List<TodoModel> todoItemList = [];
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      backgroundColor: Colors.blue,
+      backgroundColor: Color.fromRGBO(33, 34, 39, 1.0),
       textStyle: TextStyle(color: Colors.white),
       padding: EdgeInsets.all(8));
 
@@ -51,9 +53,9 @@ class _MyTaskPageState extends State<TaskPage> {
             Container(
               padding: EdgeInsets.only(top: 50, left: 35),
               alignment: Alignment.topLeft,
-              child: const Text(
+              child: Text(
                 "Today",
-                style: TextStyle(
+                style: GoogleFonts.roboto(
                     fontSize: 40, color: Color.fromRGBO(33, 34, 39, 1.0)),
               ),
             ),
@@ -77,72 +79,53 @@ class _MyTaskPageState extends State<TaskPage> {
                 },
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          padding: EdgeInsets.only(left: 30, bottom: 20),
-                          child: NiceButtons(
-                            endColor: Color.fromARGB(255, 164, 45, 65),
-                            borderColor: Color.fromARGB(255, 164, 45, 65),
-                            startColor: Color.fromARGB(255, 164, 45, 65),
-                            width: 60,
-                            height: 40,
-                            stretch: false,
-                            onTap: (finish) {
-                              removeCheckedList();
-                            },
-                            child:
-                                Icon(Icons.remove_circle, color: Colors.white),
-                          ),
+            CircularMenu(
+              toggleButtonMargin: 20,
+              toggleButtonSize: 30,
+              toggleButtonIconColor: Color.fromARGB(255, 230, 230, 230),
+              radius: 100,
+              alignment: Alignment.bottomCenter,
+              backgroundWidget: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                          children: <TextSpan>[
+                            TextSpan(text: ''),
+                          ],
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          padding: EdgeInsets.only(left: 30, bottom: 20),
-                          child: NiceButtons(
-                            endColor: Color.fromARGB(255, 45, 164, 83),
-                            borderColor: Color.fromARGB(255, 45, 164, 83),
-                            startColor: Color.fromARGB(255, 45, 164, 83),
-                            width: 60,
-                            height: 40,
-                            stretch: false,
-                            onTap: (finish) {
-                              finishTasks();
-                            },
-                            child: Icon(Icons.done, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    padding: EdgeInsets.only(right: 30, bottom: 20),
-                    child: NiceButtons(
-                      endColor: Color.fromARGB(255, 67, 175, 205),
-                      borderColor: Color.fromARGB(255, 67, 175, 205),
-                      startColor: Color.fromARGB(255, 67, 175, 205),
-                      width: 60,
-                      height: 40,
-                      stretch: false,
-                      onTap: (finish) {
-                        createTask(context, titleController);
-                      },
-                      child: Icon(Icons.add, color: Colors.white),
                     ),
                   ),
-                ),
+                ],
+              ),
+              curve: Curves.bounceOut,
+              reverseCurve: Curves.bounceInOut,
+              toggleButtonColor: Color.fromRGBO(33, 34, 39, 1.0),
+              items: [
+                CircularMenuItem(
+                    margin: 20,
+                    color: Color.fromRGBO(33, 34, 39, 1.0),
+                    icon: Icons.add,
+                    onTap: () => createTask(context, titleController)),
+                CircularMenuItem(
+                    margin: 20,
+                    color: Color.fromRGBO(33, 34, 39, 1.0),
+                    icon: Icons.remove,
+                    onTap: () => removeCheckedList()),
+                CircularMenuItem(
+                  margin: 20,
+                  color: Color.fromRGBO(33, 34, 39, 1.0),
+                  icon: Icons.check,
+                  onTap: () => finishTasks(),
+                )
               ],
             ),
           ],
@@ -155,8 +138,14 @@ class _MyTaskPageState extends State<TaskPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Add New Task"),
+            title: Text(
+              "Add New Task",
+              style: GoogleFonts.roboto(
+                  fontSize: 20, color: Color.fromRGBO(33, 34, 39, 1.0)),
+            ),
             content: TextField(
+              style: GoogleFonts.roboto(
+                  fontSize: 15, color: Color.fromRGBO(33, 34, 39, 1.0)),
               keyboardType: TextInputType.multiline,
               onChanged: (value) {
                 setState(() {
@@ -171,7 +160,8 @@ class _MyTaskPageState extends State<TaskPage> {
                 style: flatButtonStyle,
                 child: Text(
                   "Add",
-                  style: TextStyle(color: Colors.white),
+                  style: GoogleFonts.roboto(
+                      fontSize: 15, color: Color.fromARGB(255, 240, 240, 240)),
                 ),
                 onPressed: () => setState(() {
                   toDoTitle = titleValueText;
@@ -195,9 +185,16 @@ class _MyTaskPageState extends State<TaskPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Edit information for ${todoModel.title}"),
+            title: Text(
+              "Edit information for ${todoModel.title}",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.roboto(
+                  fontSize: 20, color: Color.fromRGBO(33, 34, 39, 1.0)),
+            ),
             content: Column(mainAxisSize: MainAxisSize.min, children: [
               TextField(
+                style: GoogleFonts.roboto(
+                    fontSize: 15, color: Color.fromRGBO(33, 34, 39, 1.0)),
                 keyboardType: TextInputType.multiline,
                 onChanged: (value) {
                   setState(() {
@@ -208,6 +205,8 @@ class _MyTaskPageState extends State<TaskPage> {
                 decoration: InputDecoration(hintText: "Title"),
               ),
               TextField(
+                style: GoogleFonts.roboto(
+                    fontSize: 15, color: Color.fromRGBO(33, 34, 39, 1.0)),
                 keyboardType: TextInputType.multiline,
                 onChanged: (value) {
                   setState(() {
@@ -221,7 +220,11 @@ class _MyTaskPageState extends State<TaskPage> {
                 alignment: Alignment.bottomLeft,
                 child: Container(
                   padding: EdgeInsets.only(top: 20, bottom: 2),
-                  child: Text("Priority:"),
+                  child: Text(
+                    "Priority:",
+                    style: GoogleFonts.roboto(
+                        fontSize: 15, color: Color.fromRGBO(33, 34, 39, 1.0)),
+                  ),
                 ),
               ),
               DropdownButtonFormField(
@@ -253,7 +256,8 @@ class _MyTaskPageState extends State<TaskPage> {
                 style: flatButtonStyle,
                 child: Text(
                   "Edit",
-                  style: TextStyle(color: Colors.white),
+                  style: GoogleFonts.roboto(
+                      fontSize: 15, color: Color.fromARGB(255, 240, 240, 240)),
                 ),
                 onPressed: () {
                   setState(() {

@@ -5,6 +5,7 @@ import 'package:agile_dev_2022/controller/task_api.dart';
 import 'package:agile_dev_2022/model/chartmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -74,7 +75,11 @@ class _OverviewState extends State<Overview> {
                     // Initialize category axis
                     primaryXAxis: CategoryAxis(),
                     // Chart title
-                    title: ChartTitle(text: 'Weekly overview'),
+                    title: ChartTitle(
+                        text: 'Weekly overview',
+                        textStyle: GoogleFonts.roboto(
+                            fontSize: 20,
+                            color: Color.fromRGBO(33, 34, 39, 1.0))),
                     // Enable legend
                     legend: Legend(isVisible: true),
                     // Enable tooltip
