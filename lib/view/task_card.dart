@@ -7,19 +7,22 @@ class TaskCard extends StatefulWidget {
   final Function notifyParent;
   final Function editTaskParent;
   final TodoModel toDoItem;
+  final bool rescheduleTask;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
 
-  TaskCard(
-      {Key? key,
-      required this.notifyParent,
-      required this.toDoItem,
-      required this.editTaskParent})
-      : super(key: key);
+  TaskCard({
+    Key? key,
+    required this.notifyParent,
+    required this.toDoItem,
+    required this.editTaskParent,
+    required this.rescheduleTask,
+  }) : super(key: key);
 }
 
 class _TaskCardState extends State<TaskCard> {
+  // add check if overdue method
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
       backgroundColor: Colors.green,
       textStyle: TextStyle(color: Colors.white),
@@ -34,6 +37,9 @@ class _TaskCardState extends State<TaskCard> {
           padding: const EdgeInsets.all(20),
           child: Card(
               elevation: 0,
+              color: checkOverdue(widget.toDoItem)
+                  ? Colors.yellow[200]
+                  : Colors.white,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -90,40 +96,70 @@ class _TaskCardState extends State<TaskCard> {
                           ]),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 52, bottom: 50),
-                            child: Text(
-                              widget.toDoItem.description == null
-                                  ? ""
-                                  : widget.toDoItem.description!,
-                              overflow: TextOverflow.fade,
-                              style: GoogleFonts.roboto(fontSize: 17),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 52, bottom: 50),
+                              child: Text(
+                                widget.toDoItem.description == null
+                                    ? ""
+                                    : widget.toDoItem.description!,
+                                overflow: TextOverflow.fade,
+                                style: GoogleFonts.roboto(fontSize: 17),
+                              ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 0,
-                          child: Container(
-                            padding: EdgeInsets.only(right: 30, bottom: 20),
-                            child: IconButton(
-                              splashRadius: 30,
-                              color: Color.fromRGBO(33, 34, 39, 1.0),
-                              onPressed: () {
-                                widget.editTaskParent(widget.toDoItem);
-                              },
-                              icon: Icon(Icons.edit,
-                                  color: Color.fromRGBO(33, 34, 39, 1.0)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                flex: 0,
+                                child: Container(
+                                  padding:
+                                      EdgeInsets.only(right: 30, bottom: 20),
+                                  child: IconButton(
+                                    splashRadius: 30,
+                                    color: Color.fromRGBO(33, 34, 39, 1.0),
+                                    onPressed: () {
+                                      widget.editTaskParent(widget.toDoItem);
+                                    },
+                                    icon: Icon(Icons.edit,
+                                        color: Color.fromRGBO(33, 34, 39, 1.0)),
+                                  ),
+                                ),
+                              ),
+                              if (checkOverdue(widget.toDoItem))
+                                Container(child: getRescheduleButton())
+                            ],
+                          )
+                        ])
                   ])),
         ));
+  }
+
+  bool checkOverdue(TodoModel toDoItem) {
+    if (DateTime.parse(toDoItem.createdDate.toString())
+            .difference(DateTime.now())
+            .inDays >=
+        0) {
+      return true;
+    }
+    return false;
+  }
+
+  Widget getRescheduleButton() {
+    return Container(
+        padding: EdgeInsets.only(right: 30, bottom: 20),
+        child: IconButton(
+            splashRadius: 20,
+            color: Color.fromRGBO(33, 34, 39, 1.0),
+            onPressed: () {
+              // insert reschedule code here
+            },
+            icon: Icon(Icons.edit_calendar,
+                color: Color.fromRGBO(33, 34, 39, 1.0))));
   }
 }
