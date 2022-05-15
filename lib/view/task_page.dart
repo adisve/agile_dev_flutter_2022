@@ -69,7 +69,6 @@ class _MyTaskPageState extends State<TaskPage> {
                       notifyParent: updateCheckedList,
                       toDoItem: todoItemList[index],
                       editTaskParent: editTaskParent,
-                      rescheduleTask: true,
                     ),
                     Divider(
                       indent: 35,
@@ -339,12 +338,6 @@ class _MyTaskPageState extends State<TaskPage> {
       priorityValueText = "";
     });
     updateScreen();
-  }
-
-  void rescheduleTaskParent(TodoModel toDoItem) async {
-    setState(() {
-      // insert code here
-    });
   }
 
   void removeCheckedList() async {
