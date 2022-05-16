@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/controller/task_api.dart';
+import 'package:week_of_year/week_of_year.dart';
 import 'package:agile_dev_2022/view/overview.dart';
 import 'package:agile_dev_2022/view/task_page.dart';
 import 'package:desktop_window/desktop_window.dart';
@@ -23,10 +24,8 @@ void setup() async {
   locator.registerSingleton<MyDatabase>(MyDatabase());
   getAllStashedTasks().then((_stashedTasksList) {
     for (var task in _stashedTasksList) {
-      /// Compare the current date day (int) to the one in the created date.
-      /// If it's more than a week, then we don't want it in the graph.
-      /// Currently not entirely sure that this works (what happens when we change months?)
-      if (DateTime.now().day - DateTime.parse(task.createdDate!).day > 7) {
+      if (DateTime.now().weekOfYear !=
+          DateTime.parse(task.createdDate!).weekOfYear) {
         deleteStashedTask(task);
       }
     }

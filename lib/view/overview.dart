@@ -119,7 +119,6 @@ class _OverviewState extends State<Overview> {
 
     for (var task in stashedTasks) {
       if (task.isDone!) {
-        log(DateFormat('EEEE').format(DateTime.parse(task.createdDate!)));
         _weekdaysAndTasksAccomplished[
                 DateFormat('EEEE').format(DateTime.parse(task.createdDate!))] =
             _weekdaysAndTasksAccomplished[DateFormat('EEEE')
@@ -140,7 +139,6 @@ class _OverviewState extends State<Overview> {
 
     for (var task in stashedTasks) {
       if (!task.isDone!) {
-        log(DateFormat('EEEE').format(DateTime.parse(task.createdDate!)));
         _weekdaysAndTasksNotAccomplished[
                 DateFormat('EEEE').format(DateTime.parse(task.createdDate!))] =
             _weekdaysAndTasksNotAccomplished[DateFormat('EEEE')
