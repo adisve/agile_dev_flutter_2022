@@ -18,7 +18,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
-  bool isAnswered = true;
+  bool isAnswered = false;
   List<TodoModel> checkedItemList = [];
   late List<bool> isChecked;
   late List<TodoModel> todoItemList = [];
@@ -50,98 +50,89 @@ class _MyTaskPageState extends State<TaskPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: () {
-          if (!isAnswered) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 50, left: 35),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Today",
-                    style: GoogleFonts.roboto(
-                        fontSize: 40, color: Color.fromRGBO(33, 34, 39, 1.0)),
-                  ),
+          checkDailyPopup(context);
+          return Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 50, left: 35),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Today",
+                  style: GoogleFonts.roboto(
+                      fontSize: 40, color: Color.fromRGBO(33, 34, 39, 1.0)),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: todoItemList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(children: [
-                        TaskCard(
-                          notifyParent: updateCheckedList,
-                          toDoItem: todoItemList[index],
-                          editTaskParent: editTaskParent,
-                        ),
-                        Divider(
-                          indent: 35,
-                          endIndent: 35,
-                          height: 15,
-                        )
-                      ]);
-                    },
-                  ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: todoItemList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(children: [
+                      TaskCard(
+                        notifyParent: updateCheckedList,
+                        toDoItem: todoItemList[index],
+                        editTaskParent: editTaskParent,
+                      ),
+                      Divider(
+                        indent: 35,
+                        endIndent: 35,
+                        height: 15,
+                      )
+                    ]);
+                  },
                 ),
-                CircularMenu(
-                  toggleButtonMargin: 20,
-                  toggleButtonSize: 30,
-                  toggleButtonIconColor: Color.fromARGB(255, 230, 230, 230),
-                  radius: 100,
-                  alignment: Alignment.bottomCenter,
-                  backgroundWidget: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(50.0),
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                              children: <TextSpan>[
-                                TextSpan(text: ''),
-                              ],
-                            ),
+              ),
+              CircularMenu(
+                toggleButtonMargin: 20,
+                toggleButtonSize: 30,
+                toggleButtonIconColor: Color.fromARGB(255, 230, 230, 230),
+                radius: 100,
+                alignment: Alignment.bottomCenter,
+                backgroundWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50.0),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                            children: <TextSpan>[
+                              TextSpan(text: ''),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  curve: Curves.bounceOut,
-                  reverseCurve: Curves.bounceInOut,
-                  toggleButtonColor: Color.fromRGBO(33, 34, 39, 1.0),
-                  items: [
-                    CircularMenuItem(
-                        margin: 20,
-                        color: Color.fromRGBO(33, 34, 39, 1.0),
-                        icon: Icons.add,
-                        onTap: () => createTask(context, titleController)),
-                    CircularMenuItem(
-                        margin: 20,
-                        color: Color.fromRGBO(33, 34, 39, 1.0),
-                        icon: Icons.remove,
-                        onTap: () => removeCheckedList()),
-                    CircularMenuItem(
-                      margin: 20,
-                      color: Color.fromRGBO(33, 34, 39, 1.0),
-                      icon: Icons.check,
-                      onTap: () => finishTasks(),
-                    )
+                    ),
                   ],
                 ),
-              ],
-            );
-          }
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("How're you feeling?"),
-                );
-              });
+                curve: Curves.bounceOut,
+                reverseCurve: Curves.bounceInOut,
+                toggleButtonColor: Color.fromRGBO(33, 34, 39, 1.0),
+                items: [
+                  CircularMenuItem(
+                      margin: 20,
+                      color: Color.fromRGBO(33, 34, 39, 1.0),
+                      icon: Icons.add,
+                      onTap: () => createTask(context, titleController)),
+                  CircularMenuItem(
+                      margin: 20,
+                      color: Color.fromRGBO(33, 34, 39, 1.0),
+                      icon: Icons.remove,
+                      onTap: () => removeCheckedList()),
+                  CircularMenuItem(
+                    margin: 20,
+                    color: Color.fromRGBO(33, 34, 39, 1.0),
+                    icon: Icons.check,
+                    onTap: () => finishTasks(),
+                  )
+                ],
+              ),
+            ],
+          );
         }());
   }
 
@@ -367,13 +358,32 @@ class _MyTaskPageState extends State<TaskPage> {
     });
   }
 
-  Future<void> showDailyPopup(BuildContext context) async {
+  void checkDailyPopup(BuildContext context) async {
+    if (!isAnswered)
+      await Future.delayed(Duration.zero, () {
+        showDailyPopup(context);
+        setState(() {
+          isAnswered = true;
+        });
+      });
+    return;
+  }
+
+  Future<void> showDailyPopup(BuildContext context) {
     return showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext context) {
+        builder: (context) {
           return AlertDialog(
-            title: const Text("How're you feeling?"),
+            title: Text("How're you feeling?",
+                style: GoogleFonts.roboto(
+                    fontSize: 20, color: Color.fromRGBO(33, 34, 39, 1.0))),
+            content: SingleChildScrollView(
+                child: ListBody(
+              children: <Widget>[
+                Text('Choose a value from 5 (very happy) to 1 (very sad)')
+              ],
+            )),
           );
         });
   }
