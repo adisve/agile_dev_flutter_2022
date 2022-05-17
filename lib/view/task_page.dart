@@ -18,7 +18,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
-  bool isAnswered = false;
+  //bool isAnswered = false;
   List<TodoModel> checkedItemList = [];
   late List<bool> isChecked;
   late List<TodoModel> todoItemList = [];
@@ -26,6 +26,11 @@ class _MyTaskPageState extends State<TaskPage> {
       backgroundColor: Color.fromRGBO(33, 34, 39, 1.0),
       textStyle: TextStyle(color: Colors.white),
       padding: EdgeInsets.all(8));
+  final ButtonStyle dailyButtonStyle = ElevatedButton.styleFrom(
+      primary: Colors.blue,
+      textStyle: const TextStyle(fontSize: 15),
+      padding: const EdgeInsets.all(20),
+      shape: CircleBorder(side: BorderSide(color: Colors.blue)));
 
   String descriptionValueText = "";
   String titleValueText = "";
@@ -47,10 +52,10 @@ class _MyTaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isAnswered) getDailyPopup(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: () {
-          checkDailyPopup(context);
           return Column(
             children: <Widget>[
               Container(
@@ -358,14 +363,11 @@ class _MyTaskPageState extends State<TaskPage> {
     });
   }
 
-  void checkDailyPopup(BuildContext context) async {
-    if (!isAnswered)
-      await Future.delayed(Duration.zero, () {
-        showDailyPopup(context);
-        setState(() {
-          isAnswered = true;
-        });
-      });
+  void getDailyPopup(BuildContext context) async {
+    isAnswered = true;
+    await Future.delayed(Duration.zero, () {
+      showDailyPopup(context);
+    });
     return;
   }
 
@@ -373,9 +375,9 @@ class _MyTaskPageState extends State<TaskPage> {
     return showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) {
+        builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("How're you feeling?",
+            title: Text("Hey there! How're you feeling today?",
                 style: GoogleFonts.roboto(
                     fontSize: 20, color: Color.fromRGBO(33, 34, 39, 1.0))),
             content: SingleChildScrollView(
@@ -384,6 +386,58 @@ class _MyTaskPageState extends State<TaskPage> {
                 Text('Choose a value from 5 (very happy) to 1 (very sad)')
               ],
             )),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      style: dailyButtonStyle,
+                      onPressed: () {
+                        // insert API/DB calls here
+                        Navigator.pop(context);
+                      },
+                      child: Text('5',
+                          style: GoogleFonts.roboto(
+                              color: Colors.black, fontSize: 20))),
+                  ElevatedButton(
+                      style: dailyButtonStyle,
+                      onPressed: () {
+                        // insert API/DB calls here
+                        Navigator.pop(context);
+                      },
+                      child: Text('4',
+                          style: GoogleFonts.roboto(
+                              color: Colors.black, fontSize: 20))),
+                  ElevatedButton(
+                      style: dailyButtonStyle,
+                      onPressed: () {
+                        // insert API/DB calls here
+                        Navigator.pop(context);
+                      },
+                      child: Text('3',
+                          style: GoogleFonts.roboto(
+                              color: Colors.black, fontSize: 20))),
+                  ElevatedButton(
+                      style: dailyButtonStyle,
+                      onPressed: () {
+                        // insert API/DB calls here
+                        Navigator.pop(context);
+                      },
+                      child: Text('2',
+                          style: GoogleFonts.roboto(
+                              color: Colors.black, fontSize: 20))),
+                  ElevatedButton(
+                      style: dailyButtonStyle,
+                      onPressed: () {
+                        // insert API/DB calls here
+                        Navigator.pop(context);
+                      },
+                      child: Text('1',
+                          style: GoogleFonts.roboto(
+                              color: Colors.black, fontSize: 20))),
+                ],
+              ),
+            ],
           );
         });
   }

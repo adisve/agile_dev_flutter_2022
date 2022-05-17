@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final locator = GetIt.instance;
+bool isAnswered = false;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
