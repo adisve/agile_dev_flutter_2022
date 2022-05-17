@@ -18,6 +18,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _MyTaskPageState extends State<TaskPage> {
+  bool isAnswered = true;
   List<TodoModel> checkedItemList = [];
   late List<bool> isChecked;
   late List<TodoModel> todoItemList = [];
@@ -48,7 +49,9 @@ class _MyTaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
+        body:             isAnswered ? (){return showDailyPopup(context);}() :;
+
+        Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 50, left: 35),
@@ -352,5 +355,17 @@ class _MyTaskPageState extends State<TaskPage> {
     setState(() {
       todoItemList.removeWhere((todo) => toFinish.contains(todo));
     });
+  }
+
+
+  Future<void> showDailyPopup(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("How're you feeling?"),
+          );
+        });
   }
 }
