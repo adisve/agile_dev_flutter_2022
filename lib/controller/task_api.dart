@@ -1,6 +1,7 @@
 import 'package:agile_dev_2022/controller/database/database.dart';
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
+import 'package:intl/intl.dart';
 
 List<TodoModel> batchDelete(List<TodoModel> todoItemList) {
   List<TodoModel> toRemove = [];
@@ -81,4 +82,44 @@ void deleteStashedTask(StashedTaskData stashedTaskData) async {
 
 void addToDoItems(ToDoItemData toDoItemData) async {
   await locator<MyDatabase>().insertTodoItem(toDoItemData.toCompanion(true));
+}
+
+//Mental state report
+Future<List<MentalStateReportData>> getAllMentalStateReports() async {
+  return await locator<MyDatabase>().getAllMentalStateReports();
+}
+
+void deleteMentalStateReport(
+    MentalStateReportData mentalStateReportData) async {
+  await locator<MyDatabase>()
+      .deleteMentalStateReport(mentalStateReportData.toCompanion(true));
+}
+
+void addMentalStateReport(MentalStateReportData mentalStateReportData) async {
+  List<MentalStateReportData> mentalStateReports =
+      await getAllMentalStateReports();
+
+  final reports = mentalStateReports.where((element) =>
+      DateFormat('yyyy.MM.dd').format(DateTime.parse(element.createdDate!)) ==
+      DateFormat('yyyy.MM.dd')
+          .format(DateTime.parse(mentalStateReportData.createdDate!)));
+
+  // If there is any report for the same day already => delete the row
+  if (reports.isNotEmpty) {
+    for (var item in reports) {
+      await locator<MyDatabase>()
+          .deleteMentalStateReport(item.toCompanion(true));
+    }
+  }
+  //Add the new row
+  await locator<MyDatabase>()
+      .instertMentalStateReport(mentalStateReportData.toCompanion(true));
+}
+
+Future<bool> isPopupAnswered() async {
+  DateTime now = new DateTime.now();
+  DateTime date = new DateTime(now.year, now.month, now.day);
+  return await locator<MyDatabase>()
+          .getPossibleMentalState(date.toIso8601String()) !=
+      null;
 }

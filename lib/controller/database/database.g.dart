@@ -6,7 +6,7 @@ part of 'database.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class ToDoItemData extends DataClass implements Insertable<ToDoItemData> {
   final int id;
   final String title;
@@ -561,12 +561,205 @@ class StashedTask extends Table with TableInfo<StashedTask, StashedTaskData> {
   bool get dontWriteConstraints => true;
 }
 
+class MentalStateReportData extends DataClass
+    implements Insertable<MentalStateReportData> {
+  final String? createdDate;
+  final int? value;
+  MentalStateReportData({this.createdDate, this.value});
+  factory MentalStateReportData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MentalStateReportData(
+      createdDate: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}createdDate']),
+      value: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}value']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || createdDate != null) {
+      map['createdDate'] = Variable<String?>(createdDate);
+    }
+    if (!nullToAbsent || value != null) {
+      map['value'] = Variable<int?>(value);
+    }
+    return map;
+  }
+
+  MentalStateReportCompanion toCompanion(bool nullToAbsent) {
+    return MentalStateReportCompanion(
+      createdDate: createdDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdDate),
+      value:
+          value == null && nullToAbsent ? const Value.absent() : Value(value),
+    );
+  }
+
+  factory MentalStateReportData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MentalStateReportData(
+      createdDate: serializer.fromJson<String?>(json['createdDate']),
+      value: serializer.fromJson<int?>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'createdDate': serializer.toJson<String?>(createdDate),
+      'value': serializer.toJson<int?>(value),
+    };
+  }
+
+  MentalStateReportData copyWith({String? createdDate, int? value}) =>
+      MentalStateReportData(
+        createdDate: createdDate ?? this.createdDate,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MentalStateReportData(')
+          ..write('createdDate: $createdDate, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(createdDate, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MentalStateReportData &&
+          other.createdDate == this.createdDate &&
+          other.value == this.value);
+}
+
+class MentalStateReportCompanion
+    extends UpdateCompanion<MentalStateReportData> {
+  final Value<String?> createdDate;
+  final Value<int?> value;
+  const MentalStateReportCompanion({
+    this.createdDate = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  MentalStateReportCompanion.insert({
+    this.createdDate = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  static Insertable<MentalStateReportData> custom({
+    Expression<String?>? createdDate,
+    Expression<int?>? value,
+  }) {
+    return RawValuesInsertable({
+      if (createdDate != null) 'createdDate': createdDate,
+      if (value != null) 'value': value,
+    });
+  }
+
+  MentalStateReportCompanion copyWith(
+      {Value<String?>? createdDate, Value<int?>? value}) {
+    return MentalStateReportCompanion(
+      createdDate: createdDate ?? this.createdDate,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (createdDate.present) {
+      map['createdDate'] = Variable<String?>(createdDate.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<int?>(value.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MentalStateReportCompanion(')
+          ..write('createdDate: $createdDate, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class MentalStateReport extends Table
+    with TableInfo<MentalStateReport, MentalStateReportData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  MentalStateReport(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  late final GeneratedColumn<String?> createdDate = GeneratedColumn<String?>(
+      'createdDate', aliasedName, true,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      $customConstraints: 'PRIMARY KEY');
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  late final GeneratedColumn<int?> value = GeneratedColumn<int?>(
+      'value', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  @override
+  List<GeneratedColumn> get $columns => [createdDate, value];
+  @override
+  String get aliasedName => _alias ?? 'MentalStateReport';
+  @override
+  String get actualTableName => 'MentalStateReport';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<MentalStateReportData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('createdDate')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['createdDate']!, _createdDateMeta));
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {createdDate};
+  @override
+  MentalStateReportData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MentalStateReportData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  MentalStateReport createAlias(String alias) {
+    return MentalStateReport(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final ToDoItem toDoItem = ToDoItem(this);
   late final StashedTask stashedTask = StashedTask(this);
+  late final MentalStateReport mentalStateReport = MentalStateReport(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [toDoItem, stashedTask];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [toDoItem, stashedTask, mentalStateReport];
 }

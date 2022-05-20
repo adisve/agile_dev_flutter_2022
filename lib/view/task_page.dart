@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 import 'dart:math';
 import 'package:agile_dev_2022/controller/task_api.dart';
+import 'package:agile_dev_2022/helpers/utils.dart';
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:agile_dev_2022/view/task_card.dart';
@@ -11,13 +12,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nice_buttons/nice_buttons.dart';
 
 class TaskPage extends StatefulWidget {
-  const TaskPage({Key? key}) : super(key: key);
+  final bool isAnswered;
+  const TaskPage({Key? key, required this.isAnswered}) : super(key: key);
 
   @override
   State<TaskPage> createState() => _MyTaskPageState();
 }
 
 class _MyTaskPageState extends State<TaskPage> {
+  //bool isAnswered = false;
   List<TodoModel> checkedItemList = [];
   late List<bool> isChecked;
   late List<TodoModel> todoItemList = [];
@@ -25,6 +28,11 @@ class _MyTaskPageState extends State<TaskPage> {
       backgroundColor: Color.fromRGBO(33, 34, 39, 1.0),
       textStyle: TextStyle(color: Colors.white),
       padding: EdgeInsets.all(8));
+  final ButtonStyle dailyButtonStyle = ElevatedButton.styleFrom(
+      primary: Colors.blue,
+      textStyle: const TextStyle(fontSize: 15),
+      padding: const EdgeInsets.all(20),
+      shape: CircleBorder(side: BorderSide(color: Colors.blue)));
 
   String descriptionValueText = "";
   String titleValueText = "";
@@ -46,90 +54,93 @@ class _MyTaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isAnswered) getDailyPopup(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 50, left: 35),
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Today",
-                style: GoogleFonts.roboto(
-                    fontSize: 40, color: Color.fromRGBO(33, 34, 39, 1.0)),
+        body: () {
+          return Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 50, left: 35),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Today",
+                  style: GoogleFonts.roboto(
+                      fontSize: 40, color: Color.fromRGBO(33, 34, 39, 1.0)),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: todoItemList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(children: [
-                    TaskCard(
-                      notifyParent: updateCheckedList,
-                      toDoItem: todoItemList[index],
-                      editTaskParent: editTaskParent,
-                    ),
-                    Divider(
-                      indent: 35,
-                      endIndent: 35,
-                      height: 15,
-                    )
-                  ]);
-                },
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: todoItemList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(children: [
+                      TaskCard(
+                        notifyParent: updateCheckedList,
+                        toDoItem: todoItemList[index],
+                        editTaskParent: editTaskParent,
+                      ),
+                      Divider(
+                        indent: 35,
+                        endIndent: 35,
+                        height: 15,
+                      )
+                    ]);
+                  },
+                ),
               ),
-            ),
-            CircularMenu(
-              toggleButtonMargin: 20,
-              toggleButtonSize: 30,
-              toggleButtonIconColor: Color.fromARGB(255, 230, 230, 230),
-              radius: 100,
-              alignment: Alignment.bottomCenter,
-              backgroundWidget: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(50.0),
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                          children: <TextSpan>[
-                            TextSpan(text: ''),
-                          ],
+              CircularMenu(
+                toggleButtonMargin: 20,
+                toggleButtonSize: 30,
+                toggleButtonIconColor: Color.fromARGB(255, 230, 230, 230),
+                radius: 100,
+                alignment: Alignment.bottomCenter,
+                backgroundWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50.0),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                            children: <TextSpan>[
+                              TextSpan(text: ''),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
+                ),
+                curve: Curves.bounceOut,
+                reverseCurve: Curves.bounceInOut,
+                toggleButtonColor: Color.fromRGBO(33, 34, 39, 1.0),
+                items: [
+                  CircularMenuItem(
+                      margin: 20,
+                      color: Color.fromRGBO(33, 34, 39, 1.0),
+                      icon: Icons.add,
+                      onTap: () => createTask(context, titleController)),
+                  CircularMenuItem(
+                      margin: 20,
+                      color: Color.fromRGBO(33, 34, 39, 1.0),
+                      icon: Icons.remove,
+                      onTap: () => removeCheckedList()),
+                  CircularMenuItem(
+                    margin: 20,
+                    color: Color.fromRGBO(33, 34, 39, 1.0),
+                    icon: Icons.check,
+                    onTap: () => finishTasks(),
+                  )
                 ],
               ),
-              curve: Curves.bounceOut,
-              reverseCurve: Curves.bounceInOut,
-              toggleButtonColor: Color.fromRGBO(33, 34, 39, 1.0),
-              items: [
-                CircularMenuItem(
-                    margin: 20,
-                    color: Color.fromRGBO(33, 34, 39, 1.0),
-                    icon: Icons.add,
-                    onTap: () => createTask(context, titleController)),
-                CircularMenuItem(
-                    margin: 20,
-                    color: Color.fromRGBO(33, 34, 39, 1.0),
-                    icon: Icons.remove,
-                    onTap: () => removeCheckedList()),
-                CircularMenuItem(
-                  margin: 20,
-                  color: Color.fromRGBO(33, 34, 39, 1.0),
-                  icon: Icons.check,
-                  onTap: () => finishTasks(),
-                )
-              ],
-            ),
-          ],
-        ));
+            ],
+          );
+        }());
   }
 
   Future<void> showCreateToDoItem(
@@ -352,5 +363,13 @@ class _MyTaskPageState extends State<TaskPage> {
     setState(() {
       todoItemList.removeWhere((todo) => toFinish.contains(todo));
     });
+  }
+
+  void getDailyPopup(BuildContext context) async {
+    isAnswered = true;
+    await Future.delayed(Duration.zero, () {
+      showDailyPopup(context, dailyButtonStyle);
+    });
+    return;
   }
 }

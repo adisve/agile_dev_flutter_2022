@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final locator = GetIt.instance;
+bool isAnswered = false;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,10 @@ void setup() async {
       }
     }
   });
+
+  if ((await isPopupAnswered())) {
+    isAnswered = true;
+  }
 
   // Set window sizes
   await DesktopWindow.setWindowSize(Size(1280, 720));
@@ -53,9 +58,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _currentIndex = 0;
-    _taskPage = TaskPage();
+    _taskPage = TaskPage(isAnswered: isAnswered);
     _overviewPage = Overview();
-    _currentPage = TaskPage();
+    _currentPage = TaskPage(isAnswered: isAnswered);
     _pages = [_taskPage, _overviewPage];
 
     super.initState();
