@@ -55,7 +55,10 @@ void main() {
     testWidgets('Test todocard', ((widgetTester) async {
       await widgetTester.pumpWidget(MediaQuery(
           data: new MediaQueryData(),
-          child: new MaterialApp(home: TaskPage())));
+          child: new MaterialApp(
+              home: TaskPage(
+            isAnswered: false,
+          ))));
 
       final titleFinder = find.text('Today');
       expect(titleFinder, findsOneWidget);

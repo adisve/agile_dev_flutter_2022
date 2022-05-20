@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS
 
 CREATE TABLE IF NOT EXISTS
     MentalStateReport(
-        createdDate TEXT,
-        value int,
-        id INTEGER PRIMARY KEY
+        createdDate TEXT PRIMARY KEY,
+        value int
 );

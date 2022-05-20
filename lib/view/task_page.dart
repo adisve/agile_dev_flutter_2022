@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 import 'dart:math';
 import 'package:agile_dev_2022/controller/task_api.dart';
+import 'package:agile_dev_2022/helpers/utils.dart';
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:agile_dev_2022/view/task_card.dart';
@@ -11,7 +12,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nice_buttons/nice_buttons.dart';
 
 class TaskPage extends StatefulWidget {
-  const TaskPage({Key? key}) : super(key: key);
+  final bool isAnswered;
+  const TaskPage({Key? key, required this.isAnswered}) : super(key: key);
 
   @override
   State<TaskPage> createState() => _MyTaskPageState();
@@ -366,126 +368,8 @@ class _MyTaskPageState extends State<TaskPage> {
   void getDailyPopup(BuildContext context) async {
     isAnswered = true;
     await Future.delayed(Duration.zero, () {
-      showDailyPopup(context);
+      showDailyPopup(context, dailyButtonStyle);
     });
     return;
-  }
-
-  //Create mental state reports for three days ago
-  // For testing
-//                DELETE ME
-  void createExtraRows() async {
-    /*
-    List<MentalStateReportData> mentalStateReports = await getAllMentalStateReports();
-    for (var item in mentalStateReports) {
-      deleteMentalStateReport(item);      
-    }
-    */
-    addMentalStateReport(MentalStateReportData(
-      id: Random.secure().nextInt(123456),
-      value: 4,
-      createdDate: DateTime.now().subtract(Duration(days:1)).toIso8601String()));
-
-    addMentalStateReport(MentalStateReportData(
-      id: Random.secure().nextInt(123456),
-      value: 2,
-      createdDate: DateTime.now().subtract(Duration(days:2)).toIso8601String()));
-    
-    addMentalStateReport(MentalStateReportData(
-      id: Random.secure().nextInt(123456),
-      value: 1,
-      createdDate: DateTime.now().subtract(Duration(days:3)).toIso8601String()));
-  }
-
-  Future<void> showDailyPopup(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Hey there! How're you feeling today?",
-                style: GoogleFonts.roboto(
-                    fontSize: 20, color: Color.fromRGBO(33, 34, 39, 1.0))),
-            content: SingleChildScrollView(
-                child: ListBody(
-              children: <Widget>[
-                Text('Choose a value from 5 (very happy) to 1 (very sad)')
-              ],
-            )),
-            actions: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      style: dailyButtonStyle,
-                      onPressed: () {
-                        // insert API/DB calls here
-                        addMentalStateReport(MentalStateReportData(
-                          id: Random.secure().nextInt(123456),
-                          value: 5,
-                          createdDate: DateTime.now().toIso8601String()));
-                          createExtraRows();
-                          Navigator.pop(context);
-                      },
-                      child: Text('5',
-                          style: GoogleFonts.roboto(
-                              color: Colors.black, fontSize: 20))),
-                  ElevatedButton(
-                      style: dailyButtonStyle,
-                      onPressed: () {
-                        // insert API/DB calls here
-                        addMentalStateReport(MentalStateReportData(
-                          id: Random.secure().nextInt(123456),
-                          value: 4,
-                          createdDate: DateTime.now().toIso8601String()));
-                          Navigator.pop(context);
-                      },
-                      child: Text('4',
-                          style: GoogleFonts.roboto(
-                              color: Colors.black, fontSize: 20))),
-                  ElevatedButton(
-                      style: dailyButtonStyle,
-                      onPressed: () {
-                        // insert API/DB calls here
-                        addMentalStateReport(MentalStateReportData(
-                          id: Random.secure().nextInt(123456),
-                          value: 3,
-                          createdDate: DateTime.now().toIso8601String()));
-                        Navigator.pop(context);
-                      },
-                      child: Text('3',
-                          style: GoogleFonts.roboto(
-                              color: Colors.black, fontSize: 20))),
-                  ElevatedButton(
-                      style: dailyButtonStyle,
-                      onPressed: () {
-                        // insert API/DB calls here
-                        addMentalStateReport(MentalStateReportData(
-                          id: Random.secure().nextInt(123456),
-                          value: 2,
-                          createdDate: DateTime.now().toIso8601String()));
-                        Navigator.pop(context);
-                      },
-                      child: Text('2',
-                          style: GoogleFonts.roboto(
-                              color: Colors.black, fontSize: 20))),
-                  ElevatedButton(
-                      style: dailyButtonStyle,
-                      onPressed: () {
-                        // insert API/DB calls here
-                        addMentalStateReport(MentalStateReportData(
-                          id: Random.secure().nextInt(123456),
-                          value: 1,
-                          createdDate: DateTime.now().toIso8601String()));
-                        Navigator.pop(context);
-                      },
-                      child: Text('1',
-                          style: GoogleFonts.roboto(
-                              color: Colors.black, fontSize: 20))),
-                ],
-              ),
-            ],
-          );
-        });
   }
 }

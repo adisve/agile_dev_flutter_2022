@@ -158,7 +158,7 @@ class _TaskCardState extends State<TaskCard> {
   bool checkOverdue(TodoModel toDoItem) {
     if (DateTime.parse(toDoItem.createdDate.toString())
             .difference(DateTime.now())
-            .inDays >
+            .inDays >=
         0) {
       return true;
     }

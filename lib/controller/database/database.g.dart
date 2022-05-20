@@ -565,8 +565,7 @@ class MentalStateReportData extends DataClass
     implements Insertable<MentalStateReportData> {
   final String? createdDate;
   final int? value;
-  final int id;
-  MentalStateReportData({this.createdDate, this.value, required this.id});
+  MentalStateReportData({this.createdDate, this.value});
   factory MentalStateReportData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -575,8 +574,6 @@ class MentalStateReportData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}createdDate']),
       value: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}value']),
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
     );
   }
   @override
@@ -588,7 +585,6 @@ class MentalStateReportData extends DataClass
     if (!nullToAbsent || value != null) {
       map['value'] = Variable<int?>(value);
     }
-    map['id'] = Variable<int>(id);
     return map;
   }
 
@@ -599,7 +595,6 @@ class MentalStateReportData extends DataClass
           : Value(createdDate),
       value:
           value == null && nullToAbsent ? const Value.absent() : Value(value),
-      id: Value(id),
     );
   }
 
@@ -609,7 +604,6 @@ class MentalStateReportData extends DataClass
     return MentalStateReportData(
       createdDate: serializer.fromJson<String?>(json['createdDate']),
       value: serializer.fromJson<int?>(json['value']),
-      id: serializer.fromJson<int>(json['id']),
     );
   }
   @override
@@ -618,70 +612,60 @@ class MentalStateReportData extends DataClass
     return <String, dynamic>{
       'createdDate': serializer.toJson<String?>(createdDate),
       'value': serializer.toJson<int?>(value),
-      'id': serializer.toJson<int>(id),
     };
   }
 
-  MentalStateReportData copyWith({String? createdDate, int? value, int? id}) =>
+  MentalStateReportData copyWith({String? createdDate, int? value}) =>
       MentalStateReportData(
         createdDate: createdDate ?? this.createdDate,
         value: value ?? this.value,
-        id: id ?? this.id,
       );
   @override
   String toString() {
     return (StringBuffer('MentalStateReportData(')
           ..write('createdDate: $createdDate, ')
-          ..write('value: $value, ')
-          ..write('id: $id')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(createdDate, value, id);
+  int get hashCode => Object.hash(createdDate, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MentalStateReportData &&
           other.createdDate == this.createdDate &&
-          other.value == this.value &&
-          other.id == this.id);
+          other.value == this.value);
 }
 
 class MentalStateReportCompanion
     extends UpdateCompanion<MentalStateReportData> {
   final Value<String?> createdDate;
   final Value<int?> value;
-  final Value<int> id;
   const MentalStateReportCompanion({
     this.createdDate = const Value.absent(),
     this.value = const Value.absent(),
-    this.id = const Value.absent(),
   });
   MentalStateReportCompanion.insert({
     this.createdDate = const Value.absent(),
     this.value = const Value.absent(),
-    this.id = const Value.absent(),
   });
   static Insertable<MentalStateReportData> custom({
     Expression<String?>? createdDate,
     Expression<int?>? value,
-    Expression<int>? id,
   }) {
     return RawValuesInsertable({
       if (createdDate != null) 'createdDate': createdDate,
       if (value != null) 'value': value,
-      if (id != null) 'id': id,
     });
   }
 
   MentalStateReportCompanion copyWith(
-      {Value<String?>? createdDate, Value<int?>? value, Value<int>? id}) {
+      {Value<String?>? createdDate, Value<int?>? value}) {
     return MentalStateReportCompanion(
       createdDate: createdDate ?? this.createdDate,
       value: value ?? this.value,
-      id: id ?? this.id,
     );
   }
 
@@ -694,9 +678,6 @@ class MentalStateReportCompanion
     if (value.present) {
       map['value'] = Variable<int?>(value.value);
     }
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     return map;
   }
 
@@ -704,8 +685,7 @@ class MentalStateReportCompanion
   String toString() {
     return (StringBuffer('MentalStateReportCompanion(')
           ..write('createdDate: $createdDate, ')
-          ..write('value: $value, ')
-          ..write('id: $id')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
@@ -723,21 +703,15 @@ class MentalStateReport extends Table
       'createdDate', aliasedName, true,
       type: const StringType(),
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'PRIMARY KEY');
   final VerificationMeta _valueMeta = const VerificationMeta('value');
   late final GeneratedColumn<int?> value = GeneratedColumn<int?>(
       'value', aliasedName, true,
       type: const IntType(),
       requiredDuringInsert: false,
       $customConstraints: '');
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
-      'id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      $customConstraints: 'PRIMARY KEY');
   @override
-  List<GeneratedColumn> get $columns => [createdDate, value, id];
+  List<GeneratedColumn> get $columns => [createdDate, value];
   @override
   String get aliasedName => _alias ?? 'MentalStateReport';
   @override
@@ -758,14 +732,11 @@ class MentalStateReport extends Table
       context.handle(
           _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
     }
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {createdDate};
   @override
   MentalStateReportData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return MentalStateReportData.fromData(data,

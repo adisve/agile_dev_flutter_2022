@@ -89,25 +89,37 @@ Future<List<MentalStateReportData>> getAllMentalStateReports() async {
   return await locator<MyDatabase>().getAllMentalStateReports();
 }
 
-void deleteMentalStateReport(MentalStateReportData mentalStateReportData) async {
+void deleteMentalStateReport(
+    MentalStateReportData mentalStateReportData) async {
   await locator<MyDatabase>()
       .deleteMentalStateReport(mentalStateReportData.toCompanion(true));
 }
 
 void addMentalStateReport(MentalStateReportData mentalStateReportData) async {
-  List<MentalStateReportData> mentalStateReports = await getAllMentalStateReports();
+  List<MentalStateReportData> mentalStateReports =
+      await getAllMentalStateReports();
 
   final reports = mentalStateReports.where((element) =>
-        DateFormat('yyyy.MM.dd').format(DateTime.parse(element.createdDate!)) 
-      == DateFormat('yyyy.MM.dd').format(DateTime.parse(mentalStateReportData.createdDate!))); 
+      DateFormat('yyyy.MM.dd').format(DateTime.parse(element.createdDate!)) ==
+      DateFormat('yyyy.MM.dd')
+          .format(DateTime.parse(mentalStateReportData.createdDate!)));
 
   // If there is any report for the same day already => delete the row
-  if (reports.isNotEmpty){ 
+  if (reports.isNotEmpty) {
     for (var item in reports) {
-      await locator<MyDatabase>().deleteMentalStateReport(item.toCompanion(true));
-    }            
+      await locator<MyDatabase>()
+          .deleteMentalStateReport(item.toCompanion(true));
+    }
   }
   //Add the new row
-  await locator<MyDatabase>().instertMentalStateReport(mentalStateReportData.toCompanion(true));
-    
+  await locator<MyDatabase>()
+      .instertMentalStateReport(mentalStateReportData.toCompanion(true));
+}
+
+Future<bool> isPopupAnswered() async {
+  DateTime now = new DateTime.now();
+  DateTime date = new DateTime(now.year, now.month, now.day);
+  return await locator<MyDatabase>()
+          .getPossibleMentalState(date.toIso8601String()) !=
+      null;
 }

@@ -86,16 +86,23 @@ class MyDatabase extends _$MyDatabase {
   }
 
   //Replace
-  Future<bool> updateMentalStateReport(MentalStateReportCompanion mentalStateReportCompanion) async {
-    return await (update(mentalStateReport).replace(mentalStateReportCompanion));
+  Future<bool> updateMentalStateReport(
+      MentalStateReportCompanion mentalStateReportCompanion) async {
+    return await (update(mentalStateReport)
+        .replace(mentalStateReportCompanion));
   }
 
+  Future<MentalStateReportData?> getPossibleMentalState(String date) async {
+    return await (select(mentalStateReport)
+          ..where((toDoItemTbl) => toDoItemTbl.createdDate.equals(date)))
+        .getSingleOrNull();
+  }
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFold = await getApplicationDocumentsDirectory();
-    final file = File(path.join(dbFold.path, 'db.sqlite5'));
+    final file = File(path.join(dbFold.path, 'db.sqlite7'));
     return NativeDatabase(file);
   });
 }
