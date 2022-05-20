@@ -131,8 +131,8 @@ class _OverviewState extends State<Overview> {
                                   chartModel.tasksAccomplished
                             ),
                             LineSeries<ChartModel, String>(
-                                name: "Mental state",
-                                legendItemText: "Mental state",
+                                name: "Mental State",
+                                legendItemText: "Mental State",
                                 enableTooltip: true,
                                 color: Color.fromARGB(236, 238, 239, 156),
                                 // Bind data source
