@@ -109,6 +109,7 @@ class _OverviewState extends State<Overview> {
                             ColumnSeries<ChartModel, String>(
                                 name: "Completed tasks",
                                 legendItemText: "Completed tasks",
+                                enableTooltip: true,
                                 color: Color.fromRGBO(239, 156, 218, 0.937),
                                 // Bind data source
                                 dataSource: _weekdaysAndFinishedTasksToChartModel!,
@@ -132,6 +133,7 @@ class _OverviewState extends State<Overview> {
                             LineSeries<ChartModel, String>(
                                 name: "Mental state",
                                 legendItemText: "Mental state",
+                                enableTooltip: true,
                                 color: Color.fromARGB(236, 238, 239, 156),
                                 // Bind data source
                                 dataSource: _weekdaysAndMentalStateReportToChartModel!,
