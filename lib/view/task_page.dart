@@ -397,8 +397,6 @@ class _MyTaskPageState extends State<TaskPage> {
       createdDate: DateTime.now().subtract(Duration(days:3)).toIso8601String()));
   }
 
-
-
   Future<void> showDailyPopup(BuildContext context) {
     return showDialog(
         context: context,

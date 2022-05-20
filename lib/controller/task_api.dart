@@ -97,16 +97,17 @@ void deleteMentalStateReport(MentalStateReportData mentalStateReportData) async 
 void addMentalStateReport(MentalStateReportData mentalStateReportData) async {
   List<MentalStateReportData> mentalStateReports = await getAllMentalStateReports();
 
-  bool isThisDayReported = mentalStateReports.any((element) => 
-    DateFormat('yyyy.MM.dd').format(DateTime.parse(element.createdDate!)) 
-      == DateFormat('yyyy.MM.dd').format(DateTime.parse(mentalStateReportData.createdDate!)));
+  final reports = mentalStateReports.where((element) =>
+        DateFormat('yyyy.MM.dd').format(DateTime.parse(element.createdDate!)) 
+      == DateFormat('yyyy.MM.dd').format(DateTime.parse(mentalStateReportData.createdDate!))); 
 
-  // If there is a report for that day already - update the row
-  if (isThisDayReported){ 
-    await locator<MyDatabase>().updateMentalStateReport(mentalStateReportData.toCompanion(true));        
+  // If there is any report for the same day already => delete the row
+  if (reports.isNotEmpty){ 
+    for (var item in reports) {
+      await locator<MyDatabase>().deleteMentalStateReport(item.toCompanion(true));
+    }            
   }
-  else {
-    // If not add a new row
-    await locator<MyDatabase>().instertMentalStateReport(mentalStateReportData.toCompanion(true));
-  }  
+  //Add the new row
+  await locator<MyDatabase>().instertMentalStateReport(mentalStateReportData.toCompanion(true));
+    
 }
