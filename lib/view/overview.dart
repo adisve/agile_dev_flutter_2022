@@ -34,8 +34,21 @@ class _OverviewState extends State<Overview> {
     "Saturday": 0,
     "Sunday": 0
   };
+
+  late Map<String, int> _weekdaysAndMentalStateReport = {
+    "Monday": 0,
+    "Tuesday": 0,
+    "Wednesday": 0,
+    "Thursday": 0,
+    "Friday": 0,
+    "Saturday": 0,
+    "Sunday": 0
+  };
+
+
   List<ChartModel>? _weekdaysAndFinishedTasksToChartModel;
   List<ChartModel>? _weekdaysAndUnfinishedTasksToChartModel;
+  List<ChartModel>? _weekdaysAndMentalStateReportToChartModel;
 
   @override
   void initState() {
@@ -62,7 +75,15 @@ class _OverviewState extends State<Overview> {
         });
       }
     });
+    getMentalStateReportForWeek().then((weekChart) {
+      if (mounted) {
+        setState(() {
+          _weekdaysAndMentalStateReportToChartModel = weekChart;
+        });
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,33 +105,69 @@ class _OverviewState extends State<Overview> {
                     legend: Legend(isVisible: true),
                     // Enable tooltip
                     tooltipBehavior: _tooltipBehavior,
-                    series: <BarSeries<ChartModel, String>>[
-                  BarSeries<ChartModel, String>(
-                      name: "Completed tasks",
-                      legendItemText: "Completed tasks",
-                      color: Color.fromRGBO(239, 156, 218, 0.937),
-                      // Bind data source
-                      dataSource: _weekdaysAndFinishedTasksToChartModel!,
-                      xValueMapper: (ChartModel chartModel, _) =>
-                          chartModel.weekday,
-                      yValueMapper: (ChartModel chartModel, _) =>
-                          chartModel.tasksAccomplished),
-                  BarSeries<ChartModel, String>(
-                      name: "Unfinished Tasks",
-                      enableTooltip: true,
-                      legendItemText: "Unfinished Tasks",
-                      color: Color.fromRGBO(137, 161, 239, 0.937),
-                      // Bind data source
-                      dataSource: _weekdaysAndUnfinishedTasksToChartModel!,
-                      xValueMapper: (ChartModel chartModel, _) =>
-                          chartModel.weekday,
-                      yValueMapper: (ChartModel chartModel, _) =>
-                          chartModel.tasksAccomplished)
-                ])),
+                    series: <CartesianSeries>[
+                            ColumnSeries<ChartModel, String>(
+                                name: "Completed tasks",
+                                legendItemText: "Completed tasks",
+                                color: Color.fromRGBO(239, 156, 218, 0.937),
+                                // Bind data source
+                                dataSource: _weekdaysAndFinishedTasksToChartModel!,
+                                xValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.weekday,
+                                yValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.tasksAccomplished
+                            ),
+                             ColumnSeries<ChartModel, String>(
+                                name: "Unfinished Tasks",
+                                enableTooltip: true,
+                                legendItemText: "Unfinished Tasks",
+                                color: Color.fromRGBO(137, 161, 239, 0.937),
+                                // Bind data source
+                                dataSource: _weekdaysAndUnfinishedTasksToChartModel!,
+                                xValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.weekday,
+                                yValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.tasksAccomplished
+                            ),
+                            LineSeries<ChartModel, String>(
+                                name: "Mental state",
+                                legendItemText: "Mental state",
+                                color: Color.fromARGB(236, 238, 239, 156),
+                                // Bind data source
+                                dataSource: _weekdaysAndMentalStateReportToChartModel!,
+                                xValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.weekday,
+                                yValueMapper: (ChartModel chartModel, _) =>
+                                  chartModel.tasksAccomplished
+                            ),
+                        
+                  
+                ]    
+                )),
           ))
         : Center(
             child: SpinKitWave(color: Color(0xFF1282DE)),
           );
+  }
+
+  
+  Future<List<ChartModel>> getMentalStateReportForWeek() async {
+    List<MentalStateReportData> mentalStateReports = await getAllMentalStateReports();
+    await Future.delayed(Duration(milliseconds: 500));
+
+    for (var report in mentalStateReports) {
+      int mentalState = report.value ?? 0;
+      if (mentalState != 0) {
+        log(DateFormat('EEEE').format(DateTime.parse(report.createdDate!)));
+        _weekdaysAndMentalStateReport[
+                DateFormat('EEEE').format(DateTime.parse(report.createdDate!))] = mentalState;
+      }
+    }
+    List<ChartModel> temp = [];
+    _weekdaysAndMentalStateReport.forEach((key, value) {
+      temp.add(ChartModel(key.substring(0, 3), value));
+    });
+    return temp;
   }
 
   Future<List<ChartModel>> getFinishedTasksForWeek() async {

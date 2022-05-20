@@ -371,6 +371,34 @@ class _MyTaskPageState extends State<TaskPage> {
     return;
   }
 
+  //Create mental state reports for three days ago
+  // For testing
+//                DELETE ME
+  void createExtraRows() async {
+    /*
+    List<MentalStateReportData> mentalStateReports = await getAllMentalStateReports();
+    for (var item in mentalStateReports) {
+      deleteMentalStateReport(item);      
+    }
+    */
+    addMentalStateReport(MentalStateReportData(
+      id: Random.secure().nextInt(123456),
+      value: 4,
+      createdDate: DateTime.now().subtract(Duration(days:1)).toIso8601String()));
+
+    addMentalStateReport(MentalStateReportData(
+      id: Random.secure().nextInt(123456),
+      value: 2,
+      createdDate: DateTime.now().subtract(Duration(days:2)).toIso8601String()));
+    
+    addMentalStateReport(MentalStateReportData(
+      id: Random.secure().nextInt(123456),
+      value: 1,
+      createdDate: DateTime.now().subtract(Duration(days:3)).toIso8601String()));
+  }
+
+
+
   Future<void> showDailyPopup(BuildContext context) {
     return showDialog(
         context: context,
@@ -394,7 +422,12 @@ class _MyTaskPageState extends State<TaskPage> {
                       style: dailyButtonStyle,
                       onPressed: () {
                         // insert API/DB calls here
-                        Navigator.pop(context);
+                        addMentalStateReport(MentalStateReportData(
+                          id: Random.secure().nextInt(123456),
+                          value: 5,
+                          createdDate: DateTime.now().toIso8601String()));
+                          createExtraRows();
+                          Navigator.pop(context);
                       },
                       child: Text('5',
                           style: GoogleFonts.roboto(
@@ -403,7 +436,11 @@ class _MyTaskPageState extends State<TaskPage> {
                       style: dailyButtonStyle,
                       onPressed: () {
                         // insert API/DB calls here
-                        Navigator.pop(context);
+                        addMentalStateReport(MentalStateReportData(
+                          id: Random.secure().nextInt(123456),
+                          value: 4,
+                          createdDate: DateTime.now().toIso8601String()));
+                          Navigator.pop(context);
                       },
                       child: Text('4',
                           style: GoogleFonts.roboto(
@@ -412,6 +449,10 @@ class _MyTaskPageState extends State<TaskPage> {
                       style: dailyButtonStyle,
                       onPressed: () {
                         // insert API/DB calls here
+                        addMentalStateReport(MentalStateReportData(
+                          id: Random.secure().nextInt(123456),
+                          value: 3,
+                          createdDate: DateTime.now().toIso8601String()));
                         Navigator.pop(context);
                       },
                       child: Text('3',
@@ -421,6 +462,10 @@ class _MyTaskPageState extends State<TaskPage> {
                       style: dailyButtonStyle,
                       onPressed: () {
                         // insert API/DB calls here
+                        addMentalStateReport(MentalStateReportData(
+                          id: Random.secure().nextInt(123456),
+                          value: 2,
+                          createdDate: DateTime.now().toIso8601String()));
                         Navigator.pop(context);
                       },
                       child: Text('2',
@@ -430,6 +475,10 @@ class _MyTaskPageState extends State<TaskPage> {
                       style: dailyButtonStyle,
                       onPressed: () {
                         // insert API/DB calls here
+                        addMentalStateReport(MentalStateReportData(
+                          id: Random.secure().nextInt(123456),
+                          value: 1,
+                          createdDate: DateTime.now().toIso8601String()));
                         Navigator.pop(context);
                       },
                       child: Text('1',

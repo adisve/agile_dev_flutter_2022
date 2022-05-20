@@ -50,7 +50,6 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // Get all tasks
-
   Future<List<ToDoItemData>> getAllToDoItems() async {
     return await select(toDoItem).get();
   }
@@ -68,12 +67,35 @@ class MyDatabase extends _$MyDatabase {
       StashedTaskCompanion stashedTaskCompanion) async {
     return await delete(stashedTask).delete(stashedTaskCompanion);
   }
+
+  // Get all mental state reports
+  Future<List<MentalStateReportData>> getAllMentalStateReports() async {
+    return await select(mentalStateReport).get();
+  }
+
+  // Add a mental state report
+  Future<int> instertMentalStateReport(
+      MentalStateReportCompanion mentalStateReportCompanion) async {
+    return await into(mentalStateReport).insert(mentalStateReportCompanion);
+  }
+
+  // Delete a mental state report
+  Future<int> deleteMentalStateReport(
+      MentalStateReportCompanion mentalStateReportCompanion) async {
+    return await delete(mentalStateReport).delete(mentalStateReportCompanion);
+  }
+
+  //Replace
+  Future<bool> updateMentalStateReport(MentalStateReportCompanion mentalStateReportCompanion) async {
+    return await (update(mentalStateReport).replace(mentalStateReportCompanion));
+  }
+
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFold = await getApplicationDocumentsDirectory();
-    final file = File(path.join(dbFold.path, 'db.sqlite4'));
+    final file = File(path.join(dbFold.path, 'db.sqlite5'));
     return NativeDatabase(file);
   });
 }

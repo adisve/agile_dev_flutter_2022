@@ -14,3 +14,10 @@ CREATE TABLE IF NOT EXISTS
         isDone BOOLEAN,
         id INTEGER PRIMARY KEY
 );
+
+CREATE TABLE IF NOT EXISTS
+    MentalStateReport(
+        createdDate TEXT,
+        value int,
+        id INTEGER PRIMARY KEY
+);
