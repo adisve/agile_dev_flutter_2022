@@ -1,0 +1,339 @@
+@startuml
+set namespaceSeparator ::
+
+class "agile_dev_2022::controller::database::database.dart::MyDatabase" {
+  +int schemaVersion
+  +Future<int> insertTodoItem()
+  +Future<ToDoItemData> getToDoItem()
+  +Future<bool> updateToDoItem()
+  +Future<int> deleteToDoItem()
+  +Future<int> moveTodoItem()
+  +Future<bool> markDoneToDoItem()
+  +Future<List<ToDoItemData>> getAllToDoItems()
+  +Future<List<StashedTaskData>> getAllStashedTaskItems()
+  +Future<int> insertStashedTask()
+  +Future<int> deleteStashedTask()
+  +Future<List<MentalStateReportData>> getAllMentalStateReports()
+  +Future<int> instertMentalStateReport()
+  +Future<int> deleteMentalStateReport()
+  +Future<bool> updateMentalStateReport()
+  +Future<MentalStateReportData?> getPossibleMentalState()
+}
+
+"agile_dev_2022::controller::database::database.dart::_$MyDatabase" <|-- "agile_dev_2022::controller::database::database.dart::MyDatabase"
+
+class "agile_dev_2022::controller::database::database.dart::ToDoItemData" {
+  +int id
+  +String title
+  +String? description
+  +int? priority
+  +String? createdDate
+  +bool? isDone
+  +int hashCode
+  +Map<String, Expression<dynamic>> toColumns()
+  +ToDoItemCompanion toCompanion()
+  +Map<String, dynamic> toJson()
+  +ToDoItemData copyWith()
+  +String toString()
+  +bool ==()
+}
+
+"drift::src::runtime::data_class.dart::DataClass" <|-- "agile_dev_2022::controller::database::database.dart::ToDoItemData"
+"drift::src::runtime::data_class.dart::Insertable" <|-- "agile_dev_2022::controller::database::database.dart::ToDoItemData"
+
+class "agile_dev_2022::controller::database::database.dart::ToDoItemCompanion" {
+  +Value<int> id
+  +Value<String> title
+  +Value<String?> description
+  +Value<int?> priority
+  +Value<String?> createdDate
+  +Value<bool?> isDone
+  {static} +Insertable<ToDoItemData> custom()
+  +ToDoItemCompanion copyWith()
+  +Map<String, Expression<dynamic>> toColumns()
+  +String toString()
+}
+
+"agile_dev_2022::controller::database::database.dart::ToDoItemCompanion" o-- "drift::src::runtime::data_class.dart::Value<int>"
+"agile_dev_2022::controller::database::database.dart::ToDoItemCompanion" o-- "drift::src::runtime::data_class.dart::Value<String>"
+"agile_dev_2022::controller::database::database.dart::ToDoItemCompanion" o-- "drift::src::runtime::data_class.dart::Value<bool>"
+"drift::src::runtime::data_class.dart::UpdateCompanion" <|-- "agile_dev_2022::controller::database::database.dart::ToDoItemCompanion"
+
+class "agile_dev_2022::controller::database::database.dart::ToDoItem" {
+  +GeneratedDatabase attachedDatabase
+  -String? _alias
+  -VerificationMeta _idMeta
+  +GeneratedColumn<int?> id
+  -VerificationMeta _titleMeta
+  +GeneratedColumn<String?> title
+  -VerificationMeta _descriptionMeta
+  +GeneratedColumn<String?> description
+  -VerificationMeta _priorityMeta
+  +GeneratedColumn<int?> priority
+  -VerificationMeta _createdDateMeta
+  +GeneratedColumn<String?> createdDate
+  -VerificationMeta _isDoneMeta
+  +GeneratedColumn<bool?> isDone
+  +List<GeneratedColumn<dynamic>> $columns
+  +String aliasedName
+  +String actualTableName
+  +Set<GeneratedColumn<dynamic>> $primaryKey
+  +bool dontWriteConstraints
+  +VerificationContext validateIntegrity()
+  +ToDoItemData map()
+  +ToDoItem createAlias()
+}
+
+"agile_dev_2022::controller::database::database.dart::ToDoItem" o-- "drift::src::runtime::api::runtime_api.dart::GeneratedDatabase"
+"agile_dev_2022::controller::database::database.dart::ToDoItem" o-- "drift::src::runtime::data_verification.dart::VerificationMeta"
+"agile_dev_2022::controller::database::database.dart::ToDoItem" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<int>"
+"agile_dev_2022::controller::database::database.dart::ToDoItem" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<String>"
+"agile_dev_2022::controller::database::database.dart::ToDoItem" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<bool>"
+"drift::src::dsl::dsl.dart::Table" <|-- "agile_dev_2022::controller::database::database.dart::ToDoItem"
+"drift::src::runtime::query_builder::query_builder.dart::TableInfo" <|-- "agile_dev_2022::controller::database::database.dart::ToDoItem"
+
+class "agile_dev_2022::controller::database::database.dart::StashedTaskData" {
+  +String? createdDate
+  +bool? isDone
+  +int id
+  +int hashCode
+  +Map<String, Expression<dynamic>> toColumns()
+  +StashedTaskCompanion toCompanion()
+  +Map<String, dynamic> toJson()
+  +StashedTaskData copyWith()
+  +String toString()
+  +bool ==()
+}
+
+"drift::src::runtime::data_class.dart::DataClass" <|-- "agile_dev_2022::controller::database::database.dart::StashedTaskData"
+"drift::src::runtime::data_class.dart::Insertable" <|-- "agile_dev_2022::controller::database::database.dart::StashedTaskData"
+
+class "agile_dev_2022::controller::database::database.dart::StashedTaskCompanion" {
+  +Value<String?> createdDate
+  +Value<bool?> isDone
+  +Value<int> id
+  {static} +Insertable<StashedTaskData> custom()
+  +StashedTaskCompanion copyWith()
+  +Map<String, Expression<dynamic>> toColumns()
+  +String toString()
+}
+
+"agile_dev_2022::controller::database::database.dart::StashedTaskCompanion" o-- "drift::src::runtime::data_class.dart::Value<String>"
+"agile_dev_2022::controller::database::database.dart::StashedTaskCompanion" o-- "drift::src::runtime::data_class.dart::Value<bool>"
+"agile_dev_2022::controller::database::database.dart::StashedTaskCompanion" o-- "drift::src::runtime::data_class.dart::Value<int>"
+"drift::src::runtime::data_class.dart::UpdateCompanion" <|-- "agile_dev_2022::controller::database::database.dart::StashedTaskCompanion"
+
+class "agile_dev_2022::controller::database::database.dart::StashedTask" {
+  +GeneratedDatabase attachedDatabase
+  -String? _alias
+  -VerificationMeta _createdDateMeta
+  +GeneratedColumn<String?> createdDate
+  -VerificationMeta _isDoneMeta
+  +GeneratedColumn<bool?> isDone
+  -VerificationMeta _idMeta
+  +GeneratedColumn<int?> id
+  +List<GeneratedColumn<dynamic>> $columns
+  +String aliasedName
+  +String actualTableName
+  +Set<GeneratedColumn<dynamic>> $primaryKey
+  +bool dontWriteConstraints
+  +VerificationContext validateIntegrity()
+  +StashedTaskData map()
+  +StashedTask createAlias()
+}
+
+"agile_dev_2022::controller::database::database.dart::StashedTask" o-- "drift::src::runtime::api::runtime_api.dart::GeneratedDatabase"
+"agile_dev_2022::controller::database::database.dart::StashedTask" o-- "drift::src::runtime::data_verification.dart::VerificationMeta"
+"agile_dev_2022::controller::database::database.dart::StashedTask" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<String>"
+"agile_dev_2022::controller::database::database.dart::StashedTask" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<bool>"
+"agile_dev_2022::controller::database::database.dart::StashedTask" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<int>"
+"drift::src::dsl::dsl.dart::Table" <|-- "agile_dev_2022::controller::database::database.dart::StashedTask"
+"drift::src::runtime::query_builder::query_builder.dart::TableInfo" <|-- "agile_dev_2022::controller::database::database.dart::StashedTask"
+
+class "agile_dev_2022::controller::database::database.dart::MentalStateReportData" {
+  +String? createdDate
+  +int? value
+  +int hashCode
+  +Map<String, Expression<dynamic>> toColumns()
+  +MentalStateReportCompanion toCompanion()
+  +Map<String, dynamic> toJson()
+  +MentalStateReportData copyWith()
+  +String toString()
+  +bool ==()
+}
+
+"drift::src::runtime::data_class.dart::DataClass" <|-- "agile_dev_2022::controller::database::database.dart::MentalStateReportData"
+"drift::src::runtime::data_class.dart::Insertable" <|-- "agile_dev_2022::controller::database::database.dart::MentalStateReportData"
+
+class "agile_dev_2022::controller::database::database.dart::MentalStateReportCompanion" {
+  +Value<String?> createdDate
+  +Value<int?> value
+  {static} +Insertable<MentalStateReportData> custom()
+  +MentalStateReportCompanion copyWith()
+  +Map<String, Expression<dynamic>> toColumns()
+  +String toString()
+}
+
+"agile_dev_2022::controller::database::database.dart::MentalStateReportCompanion" o-- "drift::src::runtime::data_class.dart::Value<String>"
+"agile_dev_2022::controller::database::database.dart::MentalStateReportCompanion" o-- "drift::src::runtime::data_class.dart::Value<int>"
+"drift::src::runtime::data_class.dart::UpdateCompanion" <|-- "agile_dev_2022::controller::database::database.dart::MentalStateReportCompanion"
+
+class "agile_dev_2022::controller::database::database.dart::MentalStateReport" {
+  +GeneratedDatabase attachedDatabase
+  -String? _alias
+  -VerificationMeta _createdDateMeta
+  +GeneratedColumn<String?> createdDate
+  -VerificationMeta _valueMeta
+  +GeneratedColumn<int?> value
+  +List<GeneratedColumn<dynamic>> $columns
+  +String aliasedName
+  +String actualTableName
+  +Set<GeneratedColumn<dynamic>> $primaryKey
+  +bool dontWriteConstraints
+  +VerificationContext validateIntegrity()
+  +MentalStateReportData map()
+  +MentalStateReport createAlias()
+}
+
+"agile_dev_2022::controller::database::database.dart::MentalStateReport" o-- "drift::src::runtime::api::runtime_api.dart::GeneratedDatabase"
+"agile_dev_2022::controller::database::database.dart::MentalStateReport" o-- "drift::src::runtime::data_verification.dart::VerificationMeta"
+"agile_dev_2022::controller::database::database.dart::MentalStateReport" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<String>"
+"agile_dev_2022::controller::database::database.dart::MentalStateReport" o-- "drift::src::runtime::query_builder::query_builder.dart::GeneratedColumn<int>"
+"drift::src::dsl::dsl.dart::Table" <|-- "agile_dev_2022::controller::database::database.dart::MentalStateReport"
+"drift::src::runtime::query_builder::query_builder.dart::TableInfo" <|-- "agile_dev_2022::controller::database::database.dart::MentalStateReport"
+
+abstract class "agile_dev_2022::controller::database::database.dart::_$MyDatabase" {
+  +ToDoItem toDoItem
+  +StashedTask stashedTask
+  +MentalStateReport mentalStateReport
+  +Iterable<TableInfo<Table, dynamic>> allTables
+  +List<DatabaseSchemaEntity> allSchemaEntities
+}
+
+"agile_dev_2022::controller::database::database.dart::_$MyDatabase" o-- "agile_dev_2022::controller::database::database.dart::ToDoItem"
+"agile_dev_2022::controller::database::database.dart::_$MyDatabase" o-- "agile_dev_2022::controller::database::database.dart::StashedTask"
+"agile_dev_2022::controller::database::database.dart::_$MyDatabase" o-- "agile_dev_2022::controller::database::database.dart::MentalStateReport"
+"drift::src::runtime::api::runtime_api.dart::GeneratedDatabase" <|-- "agile_dev_2022::controller::database::database.dart::_$MyDatabase"
+
+class "agile_dev_2022::main.dart::MyApp" {
+  +State<MyApp> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "agile_dev_2022::main.dart::MyApp"
+
+class "agile_dev_2022::main.dart::_MyAppState" {
+  -Widget _taskPage
+  -List<Widget> _pages
+  -Widget _overviewPage
+  -int _currentIndex
+  -Widget _currentPage
+  +void initState()
+  +void changePage()
+  +Widget build()
+}
+
+"agile_dev_2022::main.dart::_MyAppState" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::State" <|-- "agile_dev_2022::main.dart::_MyAppState"
+
+class "agile_dev_2022::model::chartmodel.dart::ChartModel" {
+  +String weekday
+  +int tasksAccomplished
+}
+
+class "agile_dev_2022::model::todo_model.dart::TodoModel" {
+  +int id
+  +String title
+  +String? description
+  +int? priority
+  +String? createdDate
+  +bool? isDone
+  +bool isChecked
+}
+
+class "agile_dev_2022::view::overview.dart::Overview" {
+  +State<Overview> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "agile_dev_2022::view::overview.dart::Overview"
+
+class "agile_dev_2022::view::overview.dart::_OverviewState" {
+  -TooltipBehavior _tooltipBehavior
+  -Map<String, int> _weekdaysAndTasksAccomplished
+  -Map<String, int> _weekdaysAndTasksNotAccomplished
+  -Map<String, int> _weekdaysAndMentalStateReport
+  -List<ChartModel>? _weekdaysAndFinishedTasksToChartModel
+  -List<ChartModel>? _weekdaysAndUnfinishedTasksToChartModel
+  -List<ChartModel>? _weekdaysAndMentalStateReportToChartModel
+  +void initState()
+  +void middleMan()
+  +Widget build()
+  +Future<List<ChartModel>> getMentalStateReportForWeek()
+  +Future<List<ChartModel>> getFinishedTasksForWeek()
+  +Future<List<ChartModel>> getUnfinishedTasksForWeek()
+}
+
+"agile_dev_2022::view::overview.dart::_OverviewState" o-- "syncfusion_flutter_charts::src::common::user_interaction::tooltip.dart::TooltipBehavior"
+"flutter::src::widgets::framework.dart::State" <|-- "agile_dev_2022::view::overview.dart::_OverviewState"
+
+class "agile_dev_2022::view::task_card.dart::TaskCard" {
+  +Function notifyParent
+  +Function editTaskParent
+  +TodoModel toDoItem
+  +State<TaskCard> createState()
+}
+
+"agile_dev_2022::view::task_card.dart::TaskCard" o-- "agile_dev_2022::model::todo_model.dart::TodoModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "agile_dev_2022::view::task_card.dart::TaskCard"
+
+class "agile_dev_2022::view::task_card.dart::_TaskCardState" {
+  +ButtonStyle flatButtonStyle
+  +Widget build()
+  +bool checkOverdue()
+  +Widget getRescheduleButton()
+  +Future<void> rescheduleToDoItem()
+}
+
+"agile_dev_2022::view::task_card.dart::_TaskCardState" o-- "flutter::src::material::button_style.dart::ButtonStyle"
+"flutter::src::widgets::framework.dart::State" <|-- "agile_dev_2022::view::task_card.dart::_TaskCardState"
+
+class "agile_dev_2022::view::task_page.dart::TaskPage" {
+  +bool isAnswered
+  +State<TaskPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "agile_dev_2022::view::task_page.dart::TaskPage"
+
+class "agile_dev_2022::view::task_page.dart::_MyTaskPageState" {
+  +List<TodoModel> checkedItemList
+  +List<bool> isChecked
+  +List<TodoModel> todoItemList
+  +ButtonStyle flatButtonStyle
+  +ButtonStyle dailyButtonStyle
+  +String descriptionValueText
+  +String titleValueText
+  +String priorityValueText
+  +String toDoTitle
+  +String toDoDescription
+  +int toDoPriority
+  +TextEditingController priorityController
+  +TextEditingController titleController
+  +TextEditingController descriptionController
+  +void initState()
+  +Widget build()
+  +Future<void> showCreateToDoItem()
+  +Future<void> showEditDescription()
+  +void updateScreen()
+  +void updateCheckedList()
+  +void createTask()
+  +void editTaskParent()
+  +void removeCheckedList()
+  +void finishTasks()
+  +void getDailyPopup()
+}
+
+"agile_dev_2022::view::task_page.dart::_MyTaskPageState" o-- "flutter::src::material::button_style.dart::ButtonStyle"
+"agile_dev_2022::view::task_page.dart::_MyTaskPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "agile_dev_2022::view::task_page.dart::_MyTaskPageState"
+
+
+@enduml
