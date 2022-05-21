@@ -32,7 +32,7 @@ Future<void> showDailyPopup(BuildContext context, dailyButtonStyle) {
                           new DateTime(now.year, now.month, now.day);
                       // insert API/DB calls here
                       addMentalStateReport(MentalStateReportData(
-                          value: 2, createdDate: date.toIso8601String()));
+                          value: 5, createdDate: date.toIso8601String()));
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Added result to overview chart!"),
                       ));
@@ -49,7 +49,7 @@ Future<void> showDailyPopup(BuildContext context, dailyButtonStyle) {
                           new DateTime(now.year, now.month, now.day);
                       // insert API/DB calls here
                       addMentalStateReport(MentalStateReportData(
-                          value: 2, createdDate: date.toIso8601String()));
+                          value: 4, createdDate: date.toIso8601String()));
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Added result to overview chart!"),
                       ));
@@ -66,7 +66,7 @@ Future<void> showDailyPopup(BuildContext context, dailyButtonStyle) {
                           new DateTime(now.year, now.month, now.day);
                       // insert API/DB calls here
                       addMentalStateReport(MentalStateReportData(
-                          value: 2, createdDate: date.toIso8601String()));
+                          value: 3, createdDate: date.toIso8601String()));
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Added result to overview chart!"),
                       ));
@@ -100,7 +100,7 @@ Future<void> showDailyPopup(BuildContext context, dailyButtonStyle) {
                           new DateTime(now.year, now.month, now.day);
                       // insert API/DB calls here
                       addMentalStateReport(MentalStateReportData(
-                          value: 2, createdDate: date.toIso8601String()));
+                          value: 1, createdDate: date.toIso8601String()));
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Added result to overview chart!"),
                       ));
