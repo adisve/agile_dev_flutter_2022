@@ -79,6 +79,7 @@ class _MyTaskPageState extends State<TaskPage> {
                         notifyParent: updateCheckedList,
                         toDoItem: todoItemList[index],
                         editTaskParent: editTaskParent,
+                        updateParentScreen: updateScreen,
                       ),
                       Divider(
                         indent: 35,

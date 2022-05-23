@@ -113,7 +113,7 @@ void main() {
             toDoItem.title,
             toDoItem.description,
             toDoItem.priority,
-            toDoItem.deadline,
+            toDoItem.createdDate,
             toDoItem.isDone,
             false));
       }

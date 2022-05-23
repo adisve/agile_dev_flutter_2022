@@ -75,6 +75,10 @@ Future<List<StashedTaskData>> getAllStashedTasks() async {
   return await locator<MyDatabase>().getAllStashedTaskItems();
 }
 
+Future<List<MentalStateReportData>> getAllMentalStateReports() async {
+  return await locator<MyDatabase>().getAllMentalStateReports();
+}
+
 void deleteStashedTask(StashedTaskData stashedTaskData) async {
   await locator<MyDatabase>()
       .deleteStashedTask(stashedTaskData.toCompanion(true));
@@ -82,11 +86,6 @@ void deleteStashedTask(StashedTaskData stashedTaskData) async {
 
 void addToDoItems(ToDoItemData toDoItemData) async {
   await locator<MyDatabase>().insertTodoItem(toDoItemData.toCompanion(true));
-}
-
-//Mental state report
-Future<List<MentalStateReportData>> getAllMentalStateReports() async {
-  return await locator<MyDatabase>().getAllMentalStateReports();
 }
 
 void deleteMentalStateReport(
