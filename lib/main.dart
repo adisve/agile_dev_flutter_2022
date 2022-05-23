@@ -31,6 +31,14 @@ void setup() async {
       }
     }
   });
+  getAllMentalStateReports().then((_mentalStateReportList) {
+    for (var report in _mentalStateReportList) {
+      if (DateTime.now().weekOfYear !=
+          DateTime.parse(report.createdDate!).weekOfYear) {
+        deleteMentalStateReport(report);
+      }
+    }
+  });
 
   if ((await isPopupAnswered())) {
     isAnswered = true;
