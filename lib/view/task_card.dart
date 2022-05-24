@@ -1,6 +1,7 @@
 import 'package:agile_dev_2022/main.dart';
 import 'package:agile_dev_2022/model/todo_model.dart';
 import 'package:flutter/material.dart';
+import 'package:week_of_year/week_of_year.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nice_buttons/nice_buttons.dart';
 
@@ -10,6 +11,7 @@ class TaskCard extends StatefulWidget {
   final Function notifyParent;
   final Function editTaskParent;
   final TodoModel toDoItem;
+  final Function updateParentScreen;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -19,6 +21,7 @@ class TaskCard extends StatefulWidget {
     required this.notifyParent,
     required this.toDoItem,
     required this.editTaskParent,
+    required this.updateParentScreen,
   }) : super(key: key);
 }
 
@@ -156,13 +159,7 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   bool checkOverdue(TodoModel toDoItem) {
-    if (DateTime.parse(toDoItem.createdDate.toString())
-            .difference(DateTime.now())
-            .inDays >
-        0) {
-      return true;
-    }
-    return false;
+    return (DateTime.parse(toDoItem.createdDate!).day != DateTime.now().day);
   }
 
   Widget getRescheduleButton() {
@@ -173,6 +170,7 @@ class _TaskCardState extends State<TaskCard> {
             color: Color.fromRGBO(33, 34, 39, 1.0),
             onPressed: () {
               rescheduleToDoItem(widget.toDoItem);
+              widget.updateParentScreen();
             },
             icon: Icon(Icons.edit_calendar,
                 color: Color.fromRGBO(33, 34, 39, 1.0))));
@@ -187,6 +185,5 @@ class _TaskCardState extends State<TaskCard> {
             createdDate: DateTime.now().toIso8601String(),
             isDone: toDoItem.isDone)
         .toCompanion(true));
-    setState(() {});
   }
 }
